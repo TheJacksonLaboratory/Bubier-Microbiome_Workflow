@@ -1,0 +1,319 @@
+---
+title: "Class Heatmap [LOD & Herit] (adjusted [0.05])"
+author: "Belinda Cornes"
+date: "12/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library("ggplot2")
+library("ggdendro")
+library("reshape2")
+library("grid")
+library(ggplot2)
+library(dplyr)
+library(ggnewscale)
+library(RColorBrewer)
+library(qtl2)
+library(Hmisc)
+
+source("/Users/corneb/Documents/MyJax/CS/Projects/Bubier/Figures/heh/code/reconst_utils.R")
+
+markers = read.delim("/Users/corneb/Documents/MyJax/CS/Projects/Bubier/Figures/heh/data/marker_grid_0.02cM_plus.txt", stringsAsFactors = F)
+markers[,2] = factor(markers[,2], levels = c(1:19, "X"))
+
+apDir <- "/Users/corneb/Documents/MyJax/CS/Projects/Bubier/Figures/corneb/fdr/"
+
+```
+
+
+### Class
+```{r class load, fig.height = 6, fig.width = 9.5, fig.align = "center"}
+
+level = "Class"
+
+load(paste0("/Users/corneb/Documents/MyJax/CS/Projects/Bubier/results/qtl.viewer/run14/results/",level,"_ready.Rdata"))
+
+#print("stool")
+lod.sens.all.s <- as.data.frame(qtl.genus.sq.s)
+#print(ncol(lod.sens.all.s))
+
+#print("cecum")
+lod.sens.all.c <- as.data.frame(qtl.genus.sq.c)
+#print(ncol(lod.sens.all.c))
+```
+
+####Cecum
+
+#####Permutations
+```{r class cecum}
+files <- grep("lod.sens.all.c",names(.GlobalEnv),value=TRUE)
+for(df in 1:length(files)){
+   
+#  pdf(paste0("/Users/corneb/Documents/MyJax/CS/Projects/Bubier/Figures/corneb/output/qtlmapping.heatmap_cluster_",files[df],"_",level,"_run14_max-lod-8.pdf"), width = 14, height = 7)
+
+  st <- sapply(strsplit(files[df],'.', fixed = TRUE),function(x) x[4])
+  if(st == 'c'){
+      herit.df <- as.data.frame(herit.c)
+      origin = "cecum"
+      apa = read.csv(paste0(apDir,"/", level,"_level_QTL_cecum_run14_a.cutoffs.csv"))
+      colnames(apa) <- gsub('^X', "", colnames(apa))
+      print(apa)
+      apx = read.csv(paste0(apDir,"/", level,"_level_QTL_cecum_run14_x.cutoffs.csv"))
+      colnames(apx) <- gsub('^X', "", colnames(apx))
+      print(apx)
+  }else{
+      herit.df <- as.data.frame(herit.s)
+      origin = "stool"
+      apa = read.csv(paste0(apDir,"/", level,"_level_QTL_stool_run14_a.cutoffs.csv"))
+      colnames(apa) <- gsub('^X', "", colnames(apa))
+      print(apa)
+      apx = read.csv(paste0(apDir,"/", level,"_level_QTL_stool_run14_x.cutoffs.csv"))
+      colnames(apx) <- gsub('^X', "", colnames(apx))
+      print(apx)
+  }
+  
+ }
+
+##extrating phenotypes that are created than 10
+apap <- apa[which(apa$"0.01" >= 9),][1]
+apxp <- apx[which(apx$"0.01" >= 11),][1]
+phenos <- unique(rbind(apap, apxp))
+
+#extracting columns out that match phenos
+csq.dd <- csq[,colnames(csq) %in% as.character(phenos[,1])]
+
+hist.data.frame(csq.dd)
+
+##selecting out random permutation for those under 10.
+#choosing random 0.01 cutoff for X & autosomes
+a01 <- sample(apa[which(apa$"0.01" < 9),]$`0.05`, 1)
+#a01 <- min(apa$`0.05`)
+print(a01)
+x01 <- sample(apx[which(apx$"0.01" < 11),]$`0.05`, 1)
+#x01 <- min(apx$`0.05`)
+print(x01)
+
+```
+
+#### Figures
+```{r class figures cecum, fig.height = 6, fig.width = 9.5, fig.align = "center"}
+
+#for(df in 1:length(files)){
+   
+#  pdf(paste0("/Users/corneb/Documents/MyJax/CS/Projects/Bubier/Figures/corneb/output/qtlmapping.heatmap_cluster_",files[df],"_",level,"_run14_max-lod-8.pdf"), width = 14, height = 7)
+
+  x <- get(files[df])
+  x[is.na(x)] <- 0
+  x.matrix <- as.matrix(t(x))
+  x.dendro <- as.dendrogram(hclust(d = dist(x = x.matrix)))
+
+  # Create dendro
+  dendro.plot <- ggdendrogram(data = x.dendro, rotate = TRUE) + 
+                 theme(axis.text.y = element_blank(), 
+                       axis.text.x = element_blank())
+
+  xt <- as.data.frame(t(x))
+  xt$entity <- rownames(xt)
+  herit.df$entity = rownames(herit.df)
+  xth <- merge(herit.df, xt, by=c("entity"), all.y=T)
+  
+  xh.long <- melt(xth, id=c("entity"))
+  xh.long$chr <- sapply(strsplit(as.character(xh.long$variable),'_', fixed = TRUE),function(x) x[1])
+  xh.long[xh.long$chr == xh.long$variable,]$chr <- "herit"
+  xh.long$chr <- factor(xh.long$chr, levels=c("herit",1:19,"X"))
+
+  min = min(xh.long$value)
+  max = max(xh.long$value)
+  
+  col.max = ifelse(max > floor(min(a01,x01)), max+1, floor(min(a01,x01))+1)
+  
+  ColorRamp   <- brewer.pal(n=length(min(a01,x01):col.max), "YlOrRd")
+  #colours <- rbind(data.frame(ColorRamp=rep("white", each=(floor(min(a01,x01))-1))), as.data.frame(ColorRamp))
+
+  xh.order <- order.dendrogram(x.dendro)
+  xh.long$entity <- factor(x = xh.long$entity, 
+                           levels = xth$entity[xh.order], 
+                           ordered = TRUE)
+  xh.long$category <- ifelse(xh.long$chr == "herit", "heritability", 
+                      ifelse(xh.long$chr == "X", "X", "auto"))
+
+  heatmap.plot.2 <-ggplot() +
+                   geom_raster(data = xh.long[xh.long$category == "auto",], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradientn(limits = c(a01,col.max),colours=ColorRamp, name = "LOD score",na.value = 'black') +
+                   new_scale_fill() +
+                   geom_raster(data = xh.long[xh.long$category == "X",], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradientn(limits = c(x01,col.max),colours=ColorRamp, name = "LOD score",na.value = 'black') +
+                   new_scale_fill() +
+                   geom_raster(data = xh.long[xh.long$category == "heritability",], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradient(low = "lightblue", high = "darkblue", name = "heritability") +
+                   facet_grid(~ chr,scales = "free", space = "free_y") +
+                   ggtitle(paste0("QTL Mapping & Heritability - ", level,":", origin)) +
+                   theme(axis.text.x = element_blank(),
+                         axis.text.y = element_text(size = 5),
+                         axis.ticks.x = element_blank(),
+                         plot.title = element_text(hjust = 0.5),
+                         legend.position = "bottom")
+
+  grid.newpage()
+  print(heatmap.plot.2, vp = viewport(x = 0.4, y = 0.5, width = 0.8, height = 1.0))
+  print(dendro.plot, vp = viewport(x = 0.90, y = 0.53, width = 0.2, height = 0.79))
+  
+  #dev.off()
+  
+ #}
+   
+```
+
+
+#### Peaks
+```{r class peaks cecum, fig.height = 6, fig.width = 9.5, fig.align = "center"}
+
+  chr = sapply(strsplit(rownames(x),'_', fixed = TRUE),function(x) x[1])
+  peaks.a <- find_peaks(x[chr != "X",] ,map, threshold = a01)
+  peaks.x <- find_peaks(x[chr == "X",] ,map, threshold = x01) 
+  
+  peaks <- rbind(peaks.a, peaks.x)
+  #peaks$origin = origin
+  print(peaks)
+  
+```
+
+####Stool
+
+#####Permutations
+```{r class stool}
+files <- grep("lod.sens.all.s",names(.GlobalEnv),value=TRUE)
+for(df in 1:length(files)){
+   
+#  pdf(paste0("/Users/corneb/Documents/MyJax/CS/Projects/Bubier/Figures/corneb/output/qtlmapping.heatmap_cluster_",files[df],"_",level,"_run14_max-lod-8.pdf"), width = 14, height = 7)
+
+  st <- sapply(strsplit(files[df],'.', fixed = TRUE),function(x) x[4])
+  if(st == 'c'){
+      herit.df <- as.data.frame(herit.c)
+      origin = "cecum"
+      apa = read.csv(paste0(apDir,"/", level,"_level_QTL_cecum_run14_a.cutoffs.csv"))
+      colnames(apa) <- gsub('^X', "", colnames(apa))
+      print(apa)
+      apx = read.csv(paste0(apDir,"/", level,"_level_QTL_cecum_run14_x.cutoffs.csv"))
+      colnames(apx) <- gsub('^X', "", colnames(apx))
+      print(apx)
+  }else{
+      herit.df <- as.data.frame(herit.s)
+      origin = "stool"
+      apa = read.csv(paste0(apDir,"/", level,"_level_QTL_stool_run14_a.cutoffs.csv"))
+      colnames(apa) <- gsub('^X', "", colnames(apa))
+      print(apa)
+      apx = read.csv(paste0(apDir,"/", level,"_level_QTL_stool_run14_x.cutoffs.csv"))
+      colnames(apx) <- gsub('^X', "", colnames(apx))
+      print(apx)
+  }
+  
+ }
+
+##extrating phenotypes that are created than 10
+apap <- apa[which(apa$"0.01" >= 9),][1]
+apxp <- apx[which(apx$"0.01" >= 11),][1]
+phenos <- unique(rbind(apap, apxp))
+
+#extracting columns out that match phenos
+ssq.dd <- ssq[,colnames(ssq) %in% as.character(phenos[,1])]
+
+hist.data.frame(ssq.dd)
+
+##selecting out random permutation for those under 10.
+#choosing random 0.01 cutoff for X & autosomes
+a01 <- sample(apa[which(apa$"0.01" < 9),]$`0.05`, 1)
+#a01 <- min(apa$`0.05`)
+print(a01)
+x01 <- sample(apx[which(apx$"0.01" < 11),]$`0.05`, 1)
+#x01 <- min(apx$`0.05`)
+print(x01)
+
+```
+
+#### Figures
+```{r class figures stool, fig.height = 6, fig.width = 9.5, fig.align = "center"}
+
+#for(df in 1:length(files)){
+   
+#  pdf(paste0("/Users/corneb/Documents/MyJax/CS/Projects/Bubier/Figures/corneb/output/qtlmapping.heatmap_cluster_",files[df],"_",level,"_run14_max-lod-8.pdf"), width = 14, height = 7)
+
+  x <- get(files[df])
+  x[is.na(x)] <- 0
+  x.matrix <- as.matrix(t(x))
+  x.dendro <- as.dendrogram(hclust(d = dist(x = x.matrix)))
+
+  # Create dendro
+  dendro.plot <- ggdendrogram(data = x.dendro, rotate = TRUE) + 
+                 theme(axis.text.y = element_blank(), 
+                       axis.text.x = element_blank())
+
+  xt <- as.data.frame(t(x))
+  xt$entity <- rownames(xt)
+  herit.df$entity = rownames(herit.df)
+  xth <- merge(herit.df, xt, by=c("entity"), all.y=T)
+  
+  xh.long <- melt(xth, id=c("entity"))
+  xh.long$chr <- sapply(strsplit(as.character(xh.long$variable),'_', fixed = TRUE),function(x) x[1])
+  xh.long[xh.long$chr == xh.long$variable,]$chr <- "herit"
+  xh.long$chr <- factor(xh.long$chr, levels=c("herit",1:19,"X"))
+
+  min = min(xh.long$value)
+  max = max(xh.long$value)
+  
+  col.max = ifelse(max > floor(min(a01,x01)), max+1, floor(min(a01,x01))+1)
+  
+  ColorRamp   <- brewer.pal(n=length(min(a01,x01):col.max), "YlOrRd")
+  #colours <- rbind(data.frame(ColorRamp=rep("white", each=(floor(min(a01,x01))-1))), as.data.frame(ColorRamp))
+
+  xh.order <- order.dendrogram(x.dendro)
+  xh.long$entity <- factor(x = xh.long$entity, 
+                           levels = xth$entity[xh.order], 
+                           ordered = TRUE)
+  xh.long$category <- ifelse(xh.long$chr == "herit", "heritability", 
+                      ifelse(xh.long$chr == "X", "X", "auto"))
+
+  heatmap.plot.2 <-ggplot() +
+                   geom_raster(data = xh.long[xh.long$category == "auto",], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradientn(limits = c(a01,col.max),colours=ColorRamp, name = "LOD score",na.value = 'black') +
+                   new_scale_fill() +
+                   geom_raster(data = xh.long[xh.long$category == "X",], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradientn(limits = c(x01,col.max),colours=ColorRamp, name = "LOD score",na.value = 'black') +
+                   new_scale_fill() +
+                   geom_raster(data = xh.long[xh.long$category == "heritability",], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradient(low = "lightblue", high = "darkblue", name = "heritability") +
+                   facet_grid(~ chr,scales = "free", space = "free_y") +
+                   ggtitle(paste0("QTL Mapping & Heritability - ", level,":", origin)) +
+                   theme(axis.text.x = element_blank(),
+                         axis.text.y = element_text(size = 5),
+                         axis.ticks.x = element_blank(),
+                         plot.title = element_text(hjust = 0.5),
+                         legend.position = "bottom")
+
+  grid.newpage()
+  print(heatmap.plot.2, vp = viewport(x = 0.4, y = 0.5, width = 0.8, height = 1.0))
+  print(dendro.plot, vp = viewport(x = 0.90, y = 0.53, width = 0.2, height = 0.79))
+  
+  #dev.off()
+  
+ #}
+   
+```
+
+
+#### Peaks
+```{r class peaks stool, fig.height = 6, fig.width = 9.5, fig.align = "center"}
+
+  chr = sapply(strsplit(rownames(x),'_', fixed = TRUE),function(x) x[1])
+  peaks.a <- find_peaks(x[chr != "X",] ,map, threshold = a01)
+  peaks.x <- find_peaks(x[chr == "X",] ,map, threshold = x01) 
+  
+  peaks <- rbind(peaks.a, peaks.x)
+  #peaks$origin = origin
+  print(peaks)
+  
+```
+
