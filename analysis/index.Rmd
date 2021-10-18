@@ -1,5 +1,5 @@
 ---
-title: "Home"
+title: "Bubier Microbiome Workflow"
 site: workflowr::wflow_site
 output:
   workflowr::wflow_html:
@@ -8,4 +8,25 @@ editor_options:
   chunk_output_type: console
 ---
 
-Welcome to my research website.
+## Heatmap Clustering
+* [Unadjusted](heatmap_clustering_unadj_white.html)
+* Adjusted (cut off p < 0.05)
+  + [Phylum](heatmap_clustering_adj_0.05_black_phylum.html)
+  + [Class](heatmap_clustering_adj_0.05_black_class.html)
+  + [Order](heatmap_clustering_adj_0.05_black_order.html)
+  + [Family](heatmap_clustering_adj_0.05_black_family.html)
+  + [Genus](heatmap_clustering_adj_0.05_black_genus.html)
+  + [OTU](heatmap_clustering_adj_0.05_black_otu.html)
+* Adjusted (cut off p < 0.01)
+  + [Phylum](heatmap_clustering_adj_0.01_black_phylum.html)
+  + [Class](heatmap_clustering_adj_0.01_black_class.html)
+  + [Order](heatmap_clustering_adj_0.01_black_order.html)
+  + [Family](heatmap_clustering_adj_0.01_black_family.html)
+  + [Genus](heatmap_clustering_adj_0.01_black_genus.html)
+  + [OTU](heatmap_clustering_adj_0.01_black_otu.html)
+  
+## GBRS Distribution
+* [gene id](gbrs_distribution_gid.html)
+* [transcript id](gbrs_distribution_tid.html)
+
+## Peak

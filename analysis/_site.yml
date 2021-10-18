@@ -1,7 +1,7 @@
-name: "Bubier-Microbiome_Workflow"
+name: Bubier Microbiome Workflow
 output_dir: ../docs
 navbar:
-  title: "Bubier-Microbiome_Workflow"
+  title: Bubier Microbiome Workflow
   left:
   - text: Home
     href: index.html
@@ -9,9 +9,13 @@ navbar:
     href: about.html
   - text: License
     href: license.html
+  right:
+  - icon: fa-github
+    text: Source code
+    href: https://github.com/thejacksonlaboratory/Bubier-Microbiome_Workflow
 output:
   workflowr::wflow_html:
     toc: yes
-    toc_float: yes
-    theme: cosmo
+    toc_float: no
+    theme: spacelab
     highlight: textmate
