@@ -1,0 +1,2282 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Belinda Cornes" />
+
+<meta name="date" content="2021-12-10" />
+
+<title>OTU Heatmap [LOD &amp; Herit] (adjusted [0.05])</title>
+
+<script src="site_libs/header-attrs-2.1/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Bubier Microbiome Workflow</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/thejacksonlaboratory/Bubier-Microbiome_Workflow">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">OTU Heatmap [LOD &amp; Herit] (adjusted [0.05])</h1>
+<h4 class="author">Belinda Cornes</h4>
+<h4 class="date">12/10/2021</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#otu">OTU</a></li>
+</ul>
+</div>
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-10-18
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>Bubier-Microbiome_Workflow/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20211012code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20211012)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20211012code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20211012)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongcf92fdb"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> cf92fdb </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongcf92fdb" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version cf92fdb. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    analysis/.DS_Store
+
+Untracked files:
+    Untracked:  analysis/gbrs_distribution_gid.Rmd
+    Untracked:  analysis/gbrs_distribution_tid.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/heatmap_clustering_adj_0.05_black_otu.Rmd</code>) and HTML (<code>docs/heatmap_clustering_adj_0.05_black_otu.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+cf92fdb
+</td>
+<td>
+Belinda Cornes
+</td>
+<td>
+2021-10-18
+</td>
+<td>
+heatmaps &amp; distribution
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="otu" class="section level3">
+<h3>OTU</h3>
+<pre class="r"><code>level = &quot;OTU&quot;
+
+load(paste0(&quot;/Users/corneb/Documents/MyJax/CS/Projects/Bubier/results/qtl.viewer/run14/results/&quot;,level,&quot;_ready.Rdata&quot;))
+
+#print(&quot;stool&quot;)
+lod.sens.all.s &lt;- as.data.frame(qtl.genus.sq.s)
+#print(ncol(lod.sens.all.s))
+
+#print(&quot;cecum&quot;)
+lod.sens.all.c &lt;- as.data.frame(qtl.genus.sq.c)
+#print(ncol(lod.sens.all.c))</code></pre>
+<p>####Cecum</p>
+<p>#####Permutations</p>
+<pre class="r"><code>files &lt;- grep(&quot;lod.sens.all.c&quot;,names(.GlobalEnv),value=TRUE)
+for(df in 1:length(files)){
+   
+#  pdf(paste0(&quot;/Users/corneb/Documents/MyJax/CS/Projects/Bubier/Figures/corneb/output/qtlmapping.heatmap_cluster_&quot;,files[df],&quot;_&quot;,level,&quot;_run14_max-lod-8.pdf&quot;), width = 14, height = 7)
+
+  st &lt;- sapply(strsplit(files[df],&#39;.&#39;, fixed = TRUE),function(x) x[4])
+  if(st == &#39;c&#39;){
+      herit.df &lt;- as.data.frame(herit.c)
+      origin = &quot;cecum&quot;
+      apa = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_cecum_run14_a.cutoffs.csv&quot;))
+      colnames(apa) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apa))
+      print(apa)
+      apx = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_cecum_run14_x.cutoffs.csv&quot;))
+      colnames(apx) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apx))
+      print(apx)
+  }else{
+      herit.df &lt;- as.data.frame(herit.s)
+      origin = &quot;stool&quot;
+      apa = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_stool_run14_a.cutoffs.csv&quot;))
+      colnames(apa) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apa))
+      print(apa)
+      apx = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_stool_run14_x.cutoffs.csv&quot;))
+      colnames(apx) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apx))
+      print(apx)
+  }
+  
+ }</code></pre>
+<pre><code>                                                     0.01      0.05       0.1
+1                          OTU_1_Lactobacillus  10.420799  8.589041  7.945589
+2          OTU_10_unclassified_Lachnospiraceae   8.634585  7.825920  7.370842
+3         OTU_100_unclassified_Lachnospiraceae  11.261749  8.519291  7.866178
+4         OTU_102_unclassified_Lachnospiraceae   8.561476  7.791644  7.361075
+5                       OTU_104_Eisenbergiella   8.896502  7.913150  7.479151
+6                     OTU_105_Clostridium_XlVa   8.540174  7.775222  7.472258
+7                 OTU_109_Escherichia_Shigella  17.582096  9.591031  8.807684
+8       OTU_11_unclassified_Porphyromonadaceae   8.772292  7.755574  7.360054
+9                       OTU_110_Intestinimonas   8.561738  7.622702  7.287044
+10             OTU_114_unclassified_Firmicutes   8.637008  7.780376  7.231602
+11                         OTU_116_Coprococcus   8.559685  7.742472  7.323516
+12                       OTU_118_Lactonifactor   9.459499  8.019191  7.481040
+13                       OTU_12_Eisenbergiella   8.662675  7.732383  7.276185
+14        OTU_120_unclassified_Lachnospiraceae   8.678773  7.847463  7.372749
+15        OTU_122_unclassified_Lachnospiraceae   8.689261  7.769171  7.315147
+16                         OTU_123_Barnesiella   9.347462  8.237485  7.779098
+17        OTU_126_unclassified_Lachnospiraceae   8.749045  7.896803  7.397088
+18                OTU_129_Pseudoflavonifractor   8.648576  7.771511  7.316550
+19                      OTU_130_Intestinimonas   8.539337  7.638779  7.233579
+20        OTU_131_unclassified_Lachnospiraceae   8.603239  7.683092  7.260755
+21        OTU_132_unclassified_Ruminococcaceae   8.377599  7.625154  7.172127
+22                       OTU_134_Ruminococcus2   8.794389  7.742931  7.290173
+23  OTU_135_Erysipelotrichaceae_incertae_sedis   9.479865  8.205170  7.682412
+24                      OTU_136_Eisenbergiella   8.236984  7.592702  7.234611
+25                       OTU_140_Acetatifactor   8.429683  7.672932  7.224382
+26        OTU_142_unclassified_Ruminococcaceae   8.467839  7.690324  7.290672
+27                    OTU_146_Clostridium_XlVa   8.867066  7.884979  7.500136
+28                       OTU_149_Oscillibacter   8.678730  7.774197  7.404817
+29                           OTU_150_Murimonas   8.243506  7.605138  7.217784
+30        OTU_151_unclassified_Lachnospiraceae  10.172103  8.265760  7.700654
+31                       OTU_153_Anaerotruncus   8.441885  7.563250  7.255503
+32        OTU_154_unclassified_Lachnospiraceae   8.633866  7.791035  7.341650
+33                OTU_156_Pseudoflavonifractor   8.695474  7.687052  7.295713
+34        OTU_158_unclassified_Lachnospiraceae   8.498769  7.558634  7.209733
+35     OTU_161_unclassified_Porphyromonadaceae 878.736627 23.775172 16.580287
+36        OTU_162_unclassified_Lachnospiraceae   8.627306  7.751168  7.403313
+37                    OTU_163_Clostridium_XlVa   9.065108  8.187860  7.744044
+38                       OTU_164_Anaerotruncus   8.462693  7.698085  7.353479
+39                    OTU_166_Fusicatenibacter   8.995091  7.735723  7.252898
+40  OTU_168_Erysipelotrichaceae_incertae_sedis   9.378815  8.140512  7.498310
+41        OTU_169_unclassified_Ruminococcaceae   8.368447  7.638607  7.313750
+42          OTU_171_unclassified_Clostridiales   8.586262  7.884518  7.371879
+43                       OTU_173_Robinsoniella   8.455730  7.727164  7.335624
+44          OTU_178_unclassified_Clostridiales   8.517918  7.722142  7.429801
+45                       OTU_179_Oscillibacter   8.571033  7.639698  7.323898
+46        OTU_180_unclassified_Lachnospiraceae  10.965735  8.821180  8.136486
+47                       OTU_181_Oscillibacter   8.549935  7.726601  7.375689
+48                    OTU_182_Clostridium_XlVa   9.025972  7.974791  7.482528
+49        OTU_187_unclassified_Lachnospiraceae   9.017176  7.934949  7.432156
+50    OTU_192_unclassified_Erysipelotrichaceae   8.781314  7.900766  7.482559
+51                      OTU_193_Clostridium_IV   9.163456  7.795272  7.314934
+52                       OTU_195_Acetatifactor   8.673070  7.853954  7.455081
+53                      OTU_196_Flavonifractor   9.027230  7.882070  7.370963
+54                      OTU_197_Butyricicoccus  11.791494  9.200955  8.422924
+55        OTU_198_unclassified_Lachnospiraceae   8.629850  7.774178  7.345701
+56            OTU_2_unclassified_Bacteroidales   8.505505  7.726098  7.324578
+57           OTU_20_unclassified_Bacteroidales   8.770986  7.702427  7.378634
+58        OTU_200_unclassified_Ruminococcaceae   8.879357  7.883788  7.430387
+59        OTU_202_unclassified_Lachnospiraceae  11.424367  8.456653  7.944302
+60        OTU_203_unclassified_Ruminococcaceae  56.744809 14.443155 11.756978
+61        OTU_204_unclassified_Lachnospiraceae   9.755384  8.284466  7.768885
+62        OTU_207_unclassified_Lachnospiraceae   8.429639  7.653087  7.294703
+63                       OTU_210_Anaerotruncus   8.481434  7.727768  7.296610
+64        OTU_211_unclassified_Lachnospiraceae   8.400632  7.643314  7.277148
+65        OTU_215_unclassified_Lachnospiraceae   8.379166  7.583095  7.223116
+66        OTU_217_unclassified_Ruminococcaceae  12.491281  9.195120  8.367803
+67                       OTU_219_Ruminococcus2   8.850798  7.826113  7.321634
+68                       OTU_22_Eisenbergiella   8.624422  7.608065  7.237593
+69        OTU_220_unclassified_Lachnospiraceae   8.599049  7.733737  7.378539
+70                       OTU_222_Oscillibacter   8.859144  7.579765  7.245516
+71        OTU_223_unclassified_Lachnospiraceae   8.766181  7.862844  7.361210
+72                    OTU_224_Clostridium_XlVb   9.398121  7.933980  7.476024
+73                      OTU_225_Intestinimonas   8.945142  7.967376  7.547165
+74                             OTU_226_Blautia   8.592223  7.786638  7.262140
+75        OTU_227_unclassified_Lachnospiraceae   8.594264  7.807469  7.420147
+76          OTU_228_unclassified_Clostridiales   8.547253  7.738968  7.326906
+77        OTU_232_unclassified_Lachnospiraceae   8.923288  7.691944  7.289252
+78                               OTU_234_Dorea  16.306664 10.456931  8.970430
+79    OTU_235_unclassified_Erysipelotrichaceae   9.179738  7.985487  7.526437
+80    OTU_236_unclassified_Erysipelotrichaceae   9.560747  8.185910  7.735599
+81        OTU_239_unclassified_Lachnospiraceae  13.342522 10.155892  9.040026
+82          OTU_243_unclassified_Clostridiales   9.692496  8.125312  7.604274
+83                    OTU_246_Clostridium_XlVa   8.606764  7.733708  7.369797
+84      OTU_249_unclassified_Coriobacteriaceae   8.609247  7.726486  7.393547
+85                         OTU_255_Anaerovorax   8.641509  7.652622  7.289706
+86        OTU_257_unclassified_Lachnospiraceae  13.315136  8.340607  7.705970
+87                       OTU_261_Anaerotruncus   8.550750  7.586595  7.282192
+88          OTU_264_unclassified_Clostridiales   9.231234  8.046496  7.600070
+89                      OTU_266_Flavonifractor   8.701886  7.744051  7.351755
+90                          OTU_279_Catabacter   8.367494  7.530578  7.175711
+91             OTU_281_unclassified_Firmicutes  11.320269  8.553777  7.772712
+92        OTU_282_unclassified_Ruminococcaceae   8.601952  7.691549  7.301699
+93                      OTU_283_Flavonifractor   8.749068  7.748001  7.318911
+94        OTU_284_unclassified_Ruminococcaceae   8.597877  7.836194  7.345466
+95        OTU_286_unclassified_Lachnospiraceae   9.033425  7.825942  7.385730
+96                    OTU_287_Clostridium_XlVa  10.688895  8.114737  7.653239
+97        OTU_288_unclassified_Ruminococcaceae   8.518796  7.632191  7.295097
+98                           OTU_292_Roseburia  12.226471  9.134086  8.297766
+99                           OTU_293_Roseburia  13.381531  9.348788  8.297658
+100                   OTU_295_Clostridium_XlVb   8.623725  7.655895  7.297020
+101                   OTU_297_Clostridium_XlVb   8.318917  7.592447  7.179103
+102         OTU_3_unclassified_Lachnospiraceae   8.632621  7.726314  7.375401
+103                       OTU_30_Lactobacillus  13.387703  9.597186  8.751059
+104     OTU_300_unclassified_Coriobacteriaceae  37.316043 13.888663 11.389281
+105                      OTU_305_Oscillibacter   8.634660  7.710289  7.295484
+106            OTU_308_unclassified_Firmicutes  10.021060  8.366696  7.769371
+107       OTU_309_unclassified_Ruminococcaceae   8.627232  7.802136  7.362537
+108                   OTU_310_Clostridium_XlVa   8.672118  7.650043  7.274532
+109         OTU_311_unclassified_Clostridiales   8.360029  7.655081  7.302293
+110       OTU_313_unclassified_Lachnospiraceae   8.790566  7.834692  7.376803
+111                     OTU_314_Intestinimonas   8.659923  7.656185  7.271055
+112       OTU_315_unclassified_Lachnospiraceae   8.236731  7.637659  7.263259
+113         OTU_319_unclassified_Clostridiales   8.826684  7.692979  7.247559
+114                      OTU_322_Oscillibacter   8.519129  7.628305  7.281834
+115       OTU_325_unclassified_Ruminococcaceae  11.205190  8.690867  8.159025
+116         OTU_326_unclassified_Clostridiales   8.958604  7.733344  7.314523
+117                      OTU_327_Oscillibacter   8.791702  7.771787  7.366869
+118            OTU_328_unclassified_Firmicutes   8.847525  7.653669  7.274352
+119                         OTU_329_Catabacter   8.999340  7.835176  7.418909
+120      OTU_33_unclassified_Coriobacteriaceae   9.481363  8.102664  7.480097
+121                      OTU_330_Oscillibacter   9.247178  7.923178  7.466706
+122         OTU_331_unclassified_Clostridiales  17.780876 10.663863  9.064250
+123       OTU_332_unclassified_Ruminococcaceae  10.044567  8.035790  7.530808
+124                   OTU_333_Clostridium_XlVb   8.723160  7.905932  7.507110
+125                       OTU_336_Anaerofustis   8.486050  7.683747  7.321719
+126                         OTU_339_Catabacter   8.582831  7.837688  7.397232
+127     OTU_34_unclassified_Porphyromonadaceae   8.678152  7.682320  7.331469
+128                   OTU_341_Clostridium_XlVb   9.944005  8.039440  7.474619
+129       OTU_346_unclassified_Lachnospiraceae  23.043427 12.400263  9.904748
+130            OTU_347_unclassified_Firmicutes  23.644983 11.585292 10.095360
+131         OTU_348_unclassified_Clostridiales  14.014069  8.459121  7.830807
+132       OTU_349_unclassified_Ruminococcaceae   9.462551  8.462588  7.848164
+133       OTU_350_unclassified_Ruminococcaceae   8.979301  7.952851  7.562118
+134                      OTU_353_Oscillibacter   9.726632  8.069485  7.504226
+135      OTU_354_Lachnospiracea_incertae_sedis  13.589240  9.771057  8.786565
+136        OTU_36_unclassified_Lachnospiraceae   9.564628  7.897192  7.470018
+137       OTU_365_unclassified_Lachnospiraceae   8.644424  7.852571  7.443749
+138                      OTU_369_Anaerotruncus   8.385230  7.669087  7.308578
+139                      OTU_371_Ruminococcus2   8.682577  7.835722  7.384155
+140                    OTU_38_Clostridium_XlVa   8.594898  7.703339  7.351359
+141                     OTU_388_Eisenbergiella   9.098585  7.965073  7.430981
+142                          OTU_4_Anaerovorax   8.665920  7.745665  7.291135
+143       OTU_403_unclassified_Lachnospiraceae   9.425013  8.205941  7.674090
+144                        OTU_41_Butyrivibrio   9.185562  7.923643  7.384197
+145                        OTU_411_Barnesiella  13.294211  8.953717  8.102905
+146               OTU_416_Pseudoflavonifractor   8.775781  7.753782  7.356159
+147       OTU_425_unclassified_Ruminococcaceae   8.886547  7.742368  7.257396
+148       OTU_433_unclassified_Lachnospiraceae   8.755535  7.696848  7.260522
+149                      OTU_439_Ruminococcus2   9.646821  8.251874  7.586271
+150                    OTU_44_Clostridium_XlVa   8.990680  7.883960  7.434014
+151        OTU_45_unclassified_Lachnospiraceae   9.066373  7.902859  7.373180
+152       OTU_453_unclassified_Lachnospiraceae   8.583815  7.680376  7.276655
+153                     OTU_455_Intestinimonas   8.433213  7.812088  7.226290
+154                         OTU_46_Barnesiella   8.601933  7.771141  7.385123
+155       OTU_460_unclassified_Lachnospiraceae  10.409727  8.795458  8.128493
+156                      OTU_464_Acetatifactor   9.980913  8.391621  7.751901
+157    OTU_471_unclassified_Porphyromonadaceae   8.693435  7.897079  7.402882
+158       OTU_475_unclassified_Lachnospiraceae  10.562372  8.806231  8.028474
+159                         OTU_48_Barnesiella  12.104049  8.234272  7.667249
+160       OTU_481_unclassified_Ruminococcaceae   8.923326  7.817618  7.365119
+161        OTU_49_unclassified_Lachnospiraceae   8.945963  7.952760  7.355040
+162       OTU_491_unclassified_Lachnospiraceae   8.822315  7.841460  7.401589
+163                   OTU_492_Clostridium_XlVa   8.797345  7.944640  7.444413
+164       OTU_494_unclassified_Lachnospiraceae   8.459890  7.669286  7.257114
+165                      OTU_496_Acetatifactor  16.066977 10.204949  8.989344
+166        OTU_50_unclassified_Lachnospiraceae   8.513415  7.587849  7.214255
+167    OTU_508_unclassified_Porphyromonadaceae   8.794440  7.796159  7.411862
+168                      OTU_509_Oscillibacter   8.555484  7.662966  7.231206
+169                         OTU_51_Barnesiella   9.031923  7.794798  7.275711
+170       OTU_511_unclassified_Lachnospiraceae  10.263847  8.238105  7.588160
+171       OTU_519_unclassified_Lachnospiraceae   8.708744  7.782378  7.372043
+172        OTU_52_unclassified_Lachnospiraceae   8.758572  7.723528  7.307915
+173                      OTU_520_Enterorhabdus  12.140546  9.509898  8.516143
+174       OTU_524_unclassified_Lachnospiraceae   9.401884  7.973264  7.497278
+175       OTU_529_unclassified_Lachnospiraceae   8.646808  7.702580  7.299201
+176                    OTU_53_Clostridium_XlVa   8.743351  7.671727  7.216258
+177         OTU_532_unclassified_Clostridiales  12.845167  9.012813  8.295471
+178       OTU_536_unclassified_Ruminococcaceae  15.587572  9.401638  8.540324
+179                        OTU_537_Barnesiella   9.033497  7.995922  7.475870
+180       OTU_539_unclassified_Lachnospiraceae   8.644273  7.783515  7.359473
+181       OTU_542_unclassified_Ruminococcaceae   8.143782  7.538098  7.177870
+182       OTU_546_unclassified_Ruminococcaceae   8.589146  7.726704  7.280026
+183                      OTU_547_Oscillibacter   8.806341  7.819601  7.284275
+184         OTU_549_unclassified_Clostridiales   9.217434  8.109403  7.571457
+185        OTU_55_unclassified_Lachnospiraceae   8.386224  7.688932  7.312980
+186                      OTU_550_Oscillibacter   8.401286  7.519720  7.203121
+187       OTU_558_unclassified_Ruminococcaceae  12.532527  9.001617  7.877526
+188                      OTU_565_Oscillibacter   8.771560  7.718090  7.318238
+189        OTU_57_unclassified_Lachnospiraceae   9.194081  8.078996  7.558673
+190       OTU_570_unclassified_Lachnospiraceae   8.856502  7.907343  7.565865
+191       OTU_571_unclassified_Lachnospiraceae   9.117021  7.956138  7.426861
+192                       OTU_58_Enterorhabdus  10.650152  8.159450  7.491576
+193        OTU_60_unclassified_Lachnospiraceae   8.381884  7.631062  7.245696
+194        OTU_61_unclassified_Lachnospiraceae   8.864440  7.961931  7.346555
+195          OTU_66_unclassified_Clostridiales   8.454930  7.598422  7.218785
+196                    OTU_67_Fusicatenibacter   9.254452  7.969648  7.502176
+197                       OTU_68_Enterorhabdus   9.069078  7.726059  7.308505
+198                      OTU_69_Butyricicoccus   9.007221  7.686485  7.319356
+199                        OTU_7_Enterorhabdus   9.701471  7.973202  7.503476
+200     OTU_70_unclassified_Porphyromonadaceae   8.442425  7.690236  7.247366
+201                      OTU_71_Eisenbergiella  11.155170  8.527317  7.967540
+202        OTU_72_unclassified_Lachnospiraceae   9.261503  7.933090  7.398484
+203                      OTU_73_Clostridium_IV   8.381710  7.734364  7.255381
+204                      OTU_79_Eisenbergiella   9.260519  8.033988  7.460781
+205       OTU_80_unclassified_Peptococcaceae_1  20.492561 10.850848  9.470095
+206                           OTU_82_Alistipes  41.793981 18.960613 14.651451
+207                       OTU_83_Oscillibacter   8.660362  7.708853  7.254067
+208                       OTU_86_Ruminococcus2   8.741144  7.982749  7.557167
+209        OTU_87_unclassified_Lachnospiraceae   9.337836  8.095797  7.556281
+210                      OTU_88_Intestinimonas   8.428661  7.657710  7.266859
+211        OTU_89_unclassified_Lachnospiraceae   8.716430  7.755344  7.384991
+212                         OTU_90_Akkermansia  10.613930  8.661746  7.868681
+213        OTU_91_unclassified_Ruminococcaceae   8.453145  7.761374  7.333458
+214                        OTU_93_Ruminococcus   8.860695  7.988705  7.572777
+215                        OTU_97_Ruminococcus   8.802193  7.779738  7.329761
+216       OTU_98_Lachnospiracea_incertae_sedis   8.891357  7.763562  7.347971
+     type level      chrs
+1   cecum   OTU autosomes
+2   cecum   OTU autosomes
+3   cecum   OTU autosomes
+4   cecum   OTU autosomes
+5   cecum   OTU autosomes
+6   cecum   OTU autosomes
+7   cecum   OTU autosomes
+8   cecum   OTU autosomes
+9   cecum   OTU autosomes
+10  cecum   OTU autosomes
+11  cecum   OTU autosomes
+12  cecum   OTU autosomes
+13  cecum   OTU autosomes
+14  cecum   OTU autosomes
+15  cecum   OTU autosomes
+16  cecum   OTU autosomes
+17  cecum   OTU autosomes
+18  cecum   OTU autosomes
+19  cecum   OTU autosomes
+20  cecum   OTU autosomes
+21  cecum   OTU autosomes
+22  cecum   OTU autosomes
+23  cecum   OTU autosomes
+24  cecum   OTU autosomes
+25  cecum   OTU autosomes
+26  cecum   OTU autosomes
+27  cecum   OTU autosomes
+28  cecum   OTU autosomes
+29  cecum   OTU autosomes
+30  cecum   OTU autosomes
+31  cecum   OTU autosomes
+32  cecum   OTU autosomes
+33  cecum   OTU autosomes
+34  cecum   OTU autosomes
+35  cecum   OTU autosomes
+36  cecum   OTU autosomes
+37  cecum   OTU autosomes
+38  cecum   OTU autosomes
+39  cecum   OTU autosomes
+40  cecum   OTU autosomes
+41  cecum   OTU autosomes
+42  cecum   OTU autosomes
+43  cecum   OTU autosomes
+44  cecum   OTU autosomes
+45  cecum   OTU autosomes
+46  cecum   OTU autosomes
+47  cecum   OTU autosomes
+48  cecum   OTU autosomes
+49  cecum   OTU autosomes
+50  cecum   OTU autosomes
+51  cecum   OTU autosomes
+52  cecum   OTU autosomes
+53  cecum   OTU autosomes
+54  cecum   OTU autosomes
+55  cecum   OTU autosomes
+56  cecum   OTU autosomes
+57  cecum   OTU autosomes
+58  cecum   OTU autosomes
+59  cecum   OTU autosomes
+60  cecum   OTU autosomes
+61  cecum   OTU autosomes
+62  cecum   OTU autosomes
+63  cecum   OTU autosomes
+64  cecum   OTU autosomes
+65  cecum   OTU autosomes
+66  cecum   OTU autosomes
+67  cecum   OTU autosomes
+68  cecum   OTU autosomes
+69  cecum   OTU autosomes
+70  cecum   OTU autosomes
+71  cecum   OTU autosomes
+72  cecum   OTU autosomes
+73  cecum   OTU autosomes
+74  cecum   OTU autosomes
+75  cecum   OTU autosomes
+76  cecum   OTU autosomes
+77  cecum   OTU autosomes
+78  cecum   OTU autosomes
+79  cecum   OTU autosomes
+80  cecum   OTU autosomes
+81  cecum   OTU autosomes
+82  cecum   OTU autosomes
+83  cecum   OTU autosomes
+84  cecum   OTU autosomes
+85  cecum   OTU autosomes
+86  cecum   OTU autosomes
+87  cecum   OTU autosomes
+88  cecum   OTU autosomes
+89  cecum   OTU autosomes
+90  cecum   OTU autosomes
+91  cecum   OTU autosomes
+92  cecum   OTU autosomes
+93  cecum   OTU autosomes
+94  cecum   OTU autosomes
+95  cecum   OTU autosomes
+96  cecum   OTU autosomes
+97  cecum   OTU autosomes
+98  cecum   OTU autosomes
+99  cecum   OTU autosomes
+100 cecum   OTU autosomes
+101 cecum   OTU autosomes
+102 cecum   OTU autosomes
+103 cecum   OTU autosomes
+104 cecum   OTU autosomes
+105 cecum   OTU autosomes
+106 cecum   OTU autosomes
+107 cecum   OTU autosomes
+108 cecum   OTU autosomes
+109 cecum   OTU autosomes
+110 cecum   OTU autosomes
+111 cecum   OTU autosomes
+112 cecum   OTU autosomes
+113 cecum   OTU autosomes
+114 cecum   OTU autosomes
+115 cecum   OTU autosomes
+116 cecum   OTU autosomes
+117 cecum   OTU autosomes
+118 cecum   OTU autosomes
+119 cecum   OTU autosomes
+120 cecum   OTU autosomes
+121 cecum   OTU autosomes
+122 cecum   OTU autosomes
+123 cecum   OTU autosomes
+124 cecum   OTU autosomes
+125 cecum   OTU autosomes
+126 cecum   OTU autosomes
+127 cecum   OTU autosomes
+128 cecum   OTU autosomes
+129 cecum   OTU autosomes
+130 cecum   OTU autosomes
+131 cecum   OTU autosomes
+132 cecum   OTU autosomes
+133 cecum   OTU autosomes
+134 cecum   OTU autosomes
+135 cecum   OTU autosomes
+136 cecum   OTU autosomes
+137 cecum   OTU autosomes
+138 cecum   OTU autosomes
+139 cecum   OTU autosomes
+140 cecum   OTU autosomes
+141 cecum   OTU autosomes
+142 cecum   OTU autosomes
+143 cecum   OTU autosomes
+144 cecum   OTU autosomes
+145 cecum   OTU autosomes
+146 cecum   OTU autosomes
+147 cecum   OTU autosomes
+148 cecum   OTU autosomes
+149 cecum   OTU autosomes
+150 cecum   OTU autosomes
+151 cecum   OTU autosomes
+152 cecum   OTU autosomes
+153 cecum   OTU autosomes
+154 cecum   OTU autosomes
+155 cecum   OTU autosomes
+156 cecum   OTU autosomes
+157 cecum   OTU autosomes
+158 cecum   OTU autosomes
+159 cecum   OTU autosomes
+160 cecum   OTU autosomes
+161 cecum   OTU autosomes
+162 cecum   OTU autosomes
+163 cecum   OTU autosomes
+164 cecum   OTU autosomes
+165 cecum   OTU autosomes
+166 cecum   OTU autosomes
+167 cecum   OTU autosomes
+168 cecum   OTU autosomes
+169 cecum   OTU autosomes
+170 cecum   OTU autosomes
+171 cecum   OTU autosomes
+172 cecum   OTU autosomes
+173 cecum   OTU autosomes
+174 cecum   OTU autosomes
+175 cecum   OTU autosomes
+176 cecum   OTU autosomes
+177 cecum   OTU autosomes
+178 cecum   OTU autosomes
+179 cecum   OTU autosomes
+180 cecum   OTU autosomes
+181 cecum   OTU autosomes
+182 cecum   OTU autosomes
+183 cecum   OTU autosomes
+184 cecum   OTU autosomes
+185 cecum   OTU autosomes
+186 cecum   OTU autosomes
+187 cecum   OTU autosomes
+188 cecum   OTU autosomes
+189 cecum   OTU autosomes
+190 cecum   OTU autosomes
+191 cecum   OTU autosomes
+192 cecum   OTU autosomes
+193 cecum   OTU autosomes
+194 cecum   OTU autosomes
+195 cecum   OTU autosomes
+196 cecum   OTU autosomes
+197 cecum   OTU autosomes
+198 cecum   OTU autosomes
+199 cecum   OTU autosomes
+200 cecum   OTU autosomes
+201 cecum   OTU autosomes
+202 cecum   OTU autosomes
+203 cecum   OTU autosomes
+204 cecum   OTU autosomes
+205 cecum   OTU autosomes
+206 cecum   OTU autosomes
+207 cecum   OTU autosomes
+208 cecum   OTU autosomes
+209 cecum   OTU autosomes
+210 cecum   OTU autosomes
+211 cecum   OTU autosomes
+212 cecum   OTU autosomes
+213 cecum   OTU autosomes
+214 cecum   OTU autosomes
+215 cecum   OTU autosomes
+216 cecum   OTU autosomes
+                                                      0.01        0.05
+1                          OTU_1_Lactobacillus   20.368329   18.805710
+2          OTU_10_unclassified_Lachnospiraceae    8.634487    7.615326
+3         OTU_100_unclassified_Lachnospiraceae   24.355172   22.850584
+4         OTU_102_unclassified_Lachnospiraceae    8.948819    7.772012
+5                       OTU_104_Eisenbergiella    9.419700    8.356374
+6                     OTU_105_Clostridium_XlVa    8.871079    7.771136
+7                 OTU_109_Escherichia_Shigella   22.269785   18.362219
+8       OTU_11_unclassified_Porphyromonadaceae    8.002999    7.468983
+9                       OTU_110_Intestinimonas    8.287892    7.419462
+10             OTU_114_unclassified_Firmicutes    8.639063    7.471126
+11                         OTU_116_Coprococcus    9.479559    8.081217
+12                       OTU_118_Lactonifactor   11.850989   10.484799
+13                       OTU_12_Eisenbergiella    8.310998    7.473451
+14        OTU_120_unclassified_Lachnospiraceae    9.503081    8.455439
+15        OTU_122_unclassified_Lachnospiraceae    8.241486    7.537257
+16                         OTU_123_Barnesiella   12.194508   10.523248
+17        OTU_126_unclassified_Lachnospiraceae    8.560130    7.577991
+18                OTU_129_Pseudoflavonifractor    9.557643    8.490755
+19                      OTU_130_Intestinimonas    8.225402    7.343463
+20        OTU_131_unclassified_Lachnospiraceae    8.799744    7.812579
+21        OTU_132_unclassified_Ruminococcaceae    8.383480    7.613981
+22                       OTU_134_Ruminococcus2    8.485604    7.479864
+23  OTU_135_Erysipelotrichaceae_incertae_sedis   11.133984    9.483648
+24                      OTU_136_Eisenbergiella    9.080332    8.142454
+25                       OTU_140_Acetatifactor    8.485769    7.499058
+26        OTU_142_unclassified_Ruminococcaceae    8.725232    7.782792
+27                    OTU_146_Clostridium_XlVa    8.706871    7.757855
+28                       OTU_149_Oscillibacter    8.826360    7.694823
+29                           OTU_150_Murimonas    8.478852    7.558375
+30        OTU_151_unclassified_Lachnospiraceae   12.067443   10.249726
+31                       OTU_153_Anaerotruncus    8.526339    7.387854
+32        OTU_154_unclassified_Lachnospiraceae    8.715237    7.587007
+33                OTU_156_Pseudoflavonifractor    8.155999    7.425703
+34        OTU_158_unclassified_Lachnospiraceae    8.355879    7.525203
+35     OTU_161_unclassified_Porphyromonadaceae 3044.626421 3043.406243
+36        OTU_162_unclassified_Lachnospiraceae   10.289077    8.362187
+37                    OTU_163_Clostridium_XlVa   10.622175    9.180931
+38                       OTU_164_Anaerotruncus    8.663097    7.653337
+39                    OTU_166_Fusicatenibacter   10.931522    9.330444
+40  OTU_168_Erysipelotrichaceae_incertae_sedis   10.958472    9.208511
+41        OTU_169_unclassified_Ruminococcaceae    8.406334    7.494935
+42          OTU_171_unclassified_Clostridiales    9.015334    7.882616
+43                       OTU_173_Robinsoniella    8.908375    7.809045
+44          OTU_178_unclassified_Clostridiales    9.499093    8.393894
+45                       OTU_179_Oscillibacter    8.350096    7.587993
+46        OTU_180_unclassified_Lachnospiraceae   13.084838   11.096056
+47                       OTU_181_Oscillibacter    9.102903    7.852485
+48                    OTU_182_Clostridium_XlVa   10.035657    8.637092
+49        OTU_187_unclassified_Lachnospiraceae   10.018935    8.856086
+50    OTU_192_unclassified_Erysipelotrichaceae    9.231025    8.165728
+51                      OTU_193_Clostridium_IV   12.440665   10.765071
+52                       OTU_195_Acetatifactor    9.195369    8.081701
+53                      OTU_196_Flavonifractor   11.682550   10.135341
+54                      OTU_197_Butyricicoccus   17.431119   14.702388
+55        OTU_198_unclassified_Lachnospiraceae    8.422215    7.549483
+56            OTU_2_unclassified_Bacteroidales    8.695199    7.447773
+57           OTU_20_unclassified_Bacteroidales    8.753742    7.995477
+58        OTU_200_unclassified_Ruminococcaceae   10.351315    8.721127
+59        OTU_202_unclassified_Lachnospiraceae   15.720653   13.858440
+60        OTU_203_unclassified_Ruminococcaceae   88.977937   87.423334
+61        OTU_204_unclassified_Lachnospiraceae   13.194295   10.685116
+62        OTU_207_unclassified_Lachnospiraceae    8.313074    7.545036
+63                       OTU_210_Anaerotruncus    8.407592    7.413203
+64        OTU_211_unclassified_Lachnospiraceae    8.499859    7.623168
+65        OTU_215_unclassified_Lachnospiraceae    8.645851    7.389869
+66        OTU_217_unclassified_Ruminococcaceae   17.550475   15.572386
+67                       OTU_219_Ruminococcus2    8.676599    7.902573
+68                       OTU_22_Eisenbergiella    8.373247    7.327162
+69        OTU_220_unclassified_Lachnospiraceae    9.259934    7.978054
+70                       OTU_222_Oscillibacter    8.701105    7.738938
+71        OTU_223_unclassified_Lachnospiraceae    9.486321    8.312816
+72                    OTU_224_Clostridium_XlVb   11.534732    9.812596
+73                      OTU_225_Intestinimonas   10.046079    8.650277
+74                             OTU_226_Blautia    8.284991    7.392442
+75        OTU_227_unclassified_Lachnospiraceae    8.943231    7.962076
+76          OTU_228_unclassified_Clostridiales    8.987742    7.813304
+77        OTU_232_unclassified_Lachnospiraceae    8.960590    7.906326
+78                               OTU_234_Dorea   21.115323   16.649342
+79    OTU_235_unclassified_Erysipelotrichaceae   10.521509    8.978686
+80    OTU_236_unclassified_Erysipelotrichaceae   11.771581    9.829175
+81        OTU_239_unclassified_Lachnospiraceae   32.633290   30.986802
+82          OTU_243_unclassified_Clostridiales   15.229977   13.421380
+83                    OTU_246_Clostridium_XlVa    9.672710    8.407740
+84      OTU_249_unclassified_Coriobacteriaceae    9.023560    8.027009
+85                         OTU_255_Anaerovorax    8.396705    7.503149
+86        OTU_257_unclassified_Lachnospiraceae   16.614186   15.071363
+87                       OTU_261_Anaerotruncus    8.860048    7.751630
+88          OTU_264_unclassified_Clostridiales   11.316659    9.949120
+89                      OTU_266_Flavonifractor    8.104347    7.207015
+90                          OTU_279_Catabacter    8.796766    7.849087
+91             OTU_281_unclassified_Firmicutes   15.476668   13.646869
+92        OTU_282_unclassified_Ruminococcaceae    8.644355    7.446543
+93                      OTU_283_Flavonifractor    8.677250    7.562345
+94        OTU_284_unclassified_Ruminococcaceae    8.291422    7.403078
+95        OTU_286_unclassified_Lachnospiraceae    8.964825    8.029987
+96                    OTU_287_Clostridium_XlVa   14.956490   12.577959
+97        OTU_288_unclassified_Ruminococcaceae    8.364551    7.467360
+98                           OTU_292_Roseburia   14.404226   12.722215
+99                           OTU_293_Roseburia   15.417121   13.702726
+100                   OTU_295_Clostridium_XlVb    8.579383    7.613998
+101                   OTU_297_Clostridium_XlVb    8.615404    7.524796
+102         OTU_3_unclassified_Lachnospiraceae    8.791526    7.758093
+103                       OTU_30_Lactobacillus   33.194134   31.590202
+104     OTU_300_unclassified_Coriobacteriaceae   50.810445   49.216223
+105                      OTU_305_Oscillibacter    8.559513    7.641493
+106            OTU_308_unclassified_Firmicutes   13.759282   10.555841
+107       OTU_309_unclassified_Ruminococcaceae    8.873449    7.923487
+108                   OTU_310_Clostridium_XlVa    8.387076    7.419084
+109         OTU_311_unclassified_Clostridiales    8.284707    7.405039
+110       OTU_313_unclassified_Lachnospiraceae    9.375005    8.176174
+111                     OTU_314_Intestinimonas    8.198229    7.343017
+112       OTU_315_unclassified_Lachnospiraceae    8.717540    7.772914
+113         OTU_319_unclassified_Clostridiales    9.127711    7.929451
+114                      OTU_322_Oscillibacter    8.196253    7.475304
+115       OTU_325_unclassified_Ruminococcaceae   14.723739   12.516732
+116         OTU_326_unclassified_Clostridiales    7.889662    7.326149
+117                      OTU_327_Oscillibacter    8.186179    7.466268
+118            OTU_328_unclassified_Firmicutes    8.850817    7.772095
+119                         OTU_329_Catabacter    9.939047    8.452982
+120      OTU_33_unclassified_Coriobacteriaceae   11.436039    9.451785
+121                      OTU_330_Oscillibacter   14.002746   12.211959
+122         OTU_331_unclassified_Clostridiales   22.160229   18.781847
+123       OTU_332_unclassified_Ruminococcaceae   11.533206   10.272497
+124                   OTU_333_Clostridium_XlVb    7.831276    7.261875
+125                       OTU_336_Anaerofustis    8.289053    7.536127
+126                         OTU_339_Catabacter    9.735910    8.450203
+127     OTU_34_unclassified_Porphyromonadaceae    9.017738    7.926509
+128                   OTU_341_Clostridium_XlVb   11.379931    9.433959
+129       OTU_346_unclassified_Lachnospiraceae   25.895022   22.631149
+130            OTU_347_unclassified_Firmicutes   27.992413   25.350542
+131         OTU_348_unclassified_Clostridiales   15.593444   13.718081
+132       OTU_349_unclassified_Ruminococcaceae   11.523303    9.796529
+133       OTU_350_unclassified_Ruminococcaceae   10.621250    9.192074
+134                      OTU_353_Oscillibacter   11.638284    9.899039
+135      OTU_354_Lachnospiracea_incertae_sedis   22.352058   20.161133
+136        OTU_36_unclassified_Lachnospiraceae   10.438312    9.100687
+137       OTU_365_unclassified_Lachnospiraceae   10.016955    8.642378
+138                      OTU_369_Anaerotruncus    8.369632    7.334158
+139                      OTU_371_Ruminococcus2    9.291354    8.081454
+140                    OTU_38_Clostridium_XlVa    8.495516    7.472965
+141                     OTU_388_Eisenbergiella    9.908852    8.586775
+142                          OTU_4_Anaerovorax    8.707977    7.691580
+143       OTU_403_unclassified_Lachnospiraceae   10.369943    9.190821
+144                        OTU_41_Butyrivibrio    9.267455    8.042116
+145                        OTU_411_Barnesiella   16.092229   14.496922
+146               OTU_416_Pseudoflavonifractor    8.323474    7.323871
+147       OTU_425_unclassified_Ruminococcaceae    9.213720    8.076839
+148       OTU_433_unclassified_Lachnospiraceae    8.554650    7.574767
+149                      OTU_439_Ruminococcus2   12.583516   10.643140
+150                    OTU_44_Clostridium_XlVa   10.101294    8.983508
+151        OTU_45_unclassified_Lachnospiraceae   10.945191    9.428331
+152       OTU_453_unclassified_Lachnospiraceae    8.563603    7.625174
+153                     OTU_455_Intestinimonas    8.324954    7.396703
+154                         OTU_46_Barnesiella    8.191981    7.323578
+155       OTU_460_unclassified_Lachnospiraceae   14.419841   11.961808
+156                      OTU_464_Acetatifactor   12.465271   10.630849
+157    OTU_471_unclassified_Porphyromonadaceae    9.173405    7.868604
+158       OTU_475_unclassified_Lachnospiraceae   13.954515   11.308768
+159                         OTU_48_Barnesiella   14.321623   13.255681
+160       OTU_481_unclassified_Ruminococcaceae   10.012084    8.772587
+161        OTU_49_unclassified_Lachnospiraceae   10.191047    8.927437
+162       OTU_491_unclassified_Lachnospiraceae    9.548801    8.337845
+163                   OTU_492_Clostridium_XlVa    9.029087    8.035761
+164       OTU_494_unclassified_Lachnospiraceae    8.574103    7.414202
+165                      OTU_496_Acetatifactor   21.750710   17.854481
+166        OTU_50_unclassified_Lachnospiraceae    8.457740    7.733035
+167    OTU_508_unclassified_Porphyromonadaceae    8.489668    7.604865
+168                      OTU_509_Oscillibacter    8.484756    7.504427
+169                         OTU_51_Barnesiella    8.393602    7.430972
+170       OTU_511_unclassified_Lachnospiraceae   12.755304   10.996116
+171       OTU_519_unclassified_Lachnospiraceae    8.092722    7.286705
+172        OTU_52_unclassified_Lachnospiraceae    8.245383    7.549348
+173                      OTU_520_Enterorhabdus   16.596453   13.300365
+174       OTU_524_unclassified_Lachnospiraceae   12.068148   11.096126
+175       OTU_529_unclassified_Lachnospiraceae    8.373103    7.478862
+176                    OTU_53_Clostridium_XlVa    8.594476    7.504397
+177         OTU_532_unclassified_Clostridiales   19.112960   16.921251
+178       OTU_536_unclassified_Ruminococcaceae   19.621536   16.440391
+179                        OTU_537_Barnesiella   10.460162    9.279266
+180       OTU_539_unclassified_Lachnospiraceae    8.767373    7.726504
+181       OTU_542_unclassified_Ruminococcaceae    8.554773    7.594288
+182       OTU_546_unclassified_Ruminococcaceae    8.303160    7.404690
+183                      OTU_547_Oscillibacter    8.209208    7.493422
+184         OTU_549_unclassified_Clostridiales   10.239285    8.717997
+185        OTU_55_unclassified_Lachnospiraceae    8.152176    7.433711
+186                      OTU_550_Oscillibacter    8.071155    7.372625
+187       OTU_558_unclassified_Ruminococcaceae   16.923391   14.411679
+188                      OTU_565_Oscillibacter    8.222222    7.379616
+189        OTU_57_unclassified_Lachnospiraceae   10.178782    8.706340
+190       OTU_570_unclassified_Lachnospiraceae   10.433187    8.758307
+191       OTU_571_unclassified_Lachnospiraceae   10.323837    8.680904
+192                       OTU_58_Enterorhabdus   14.080692   12.674651
+193        OTU_60_unclassified_Lachnospiraceae    8.281887    7.423424
+194        OTU_61_unclassified_Lachnospiraceae    8.827719    7.710607
+195          OTU_66_unclassified_Clostridiales    8.680315    7.745368
+196                    OTU_67_Fusicatenibacter    9.570970    8.437614
+197                       OTU_68_Enterorhabdus   11.833550   10.090075
+198                      OTU_69_Butyricicoccus    8.409715    7.440622
+199                        OTU_7_Enterorhabdus   13.221211   11.647077
+200     OTU_70_unclassified_Porphyromonadaceae    8.570949    7.619693
+201                      OTU_71_Eisenbergiella   14.545483   12.582554
+202        OTU_72_unclassified_Lachnospiraceae    9.834599    8.502417
+203                      OTU_73_Clostridium_IV    8.421157    7.538002
+204                      OTU_79_Eisenbergiella   10.033802    8.550060
+205       OTU_80_unclassified_Peptococcaceae_1   25.570472   20.661163
+206                           OTU_82_Alistipes  134.099935  132.338645
+207                       OTU_83_Oscillibacter    8.546808    7.517435
+208                       OTU_86_Ruminococcus2    9.351050    8.484270
+209        OTU_87_unclassified_Lachnospiraceae   10.062163    8.831398
+210                      OTU_88_Intestinimonas    8.278701    7.465978
+211        OTU_89_unclassified_Lachnospiraceae    9.569103    8.201355
+212                         OTU_90_Akkermansia   12.752402   11.440767
+213        OTU_91_unclassified_Ruminococcaceae    8.454375    7.564437
+214                        OTU_93_Ruminococcus   10.622266    9.169078
+215                        OTU_97_Ruminococcus    9.492927    8.105879
+216       OTU_98_Lachnospiracea_incertae_sedis    8.063915    7.171370
+           0.1  type level chrs
+1    14.964776 cecum   OTU    X
+2     7.009429 cecum   OTU    X
+3    17.993101 cecum   OTU    X
+4     7.403250 cecum   OTU    X
+5     7.782998 cecum   OTU    X
+6     7.366543 cecum   OTU    X
+7    16.620923 cecum   OTU    X
+8     7.054079 cecum   OTU    X
+9     7.073127 cecum   OTU    X
+10    7.038309 cecum   OTU    X
+11    7.537521 cecum   OTU    X
+12    9.564102 cecum   OTU    X
+13    7.010135 cecum   OTU    X
+14    7.919418 cecum   OTU    X
+15    7.071150 cecum   OTU    X
+16    9.420359 cecum   OTU    X
+17    7.152577 cecum   OTU    X
+18    7.817892 cecum   OTU    X
+19    6.945536 cecum   OTU    X
+20    7.377599 cecum   OTU    X
+21    7.099379 cecum   OTU    X
+22    7.052382 cecum   OTU    X
+23    8.754738 cecum   OTU    X
+24    7.648903 cecum   OTU    X
+25    7.078264 cecum   OTU    X
+26    7.385272 cecum   OTU    X
+27    7.238321 cecum   OTU    X
+28    7.222854 cecum   OTU    X
+29    7.054774 cecum   OTU    X
+30    9.599027 cecum   OTU    X
+31    7.077965 cecum   OTU    X
+32    7.076636 cecum   OTU    X
+33    7.069735 cecum   OTU    X
+34    7.122476 cecum   OTU    X
+35  225.815656 cecum   OTU    X
+36    7.798178 cecum   OTU    X
+37    8.589411 cecum   OTU    X
+38    7.216944 cecum   OTU    X
+39    8.640939 cecum   OTU    X
+40    8.618443 cecum   OTU    X
+41    7.099140 cecum   OTU    X
+42    7.400892 cecum   OTU    X
+43    7.332691 cecum   OTU    X
+44    7.781463 cecum   OTU    X
+45    7.200743 cecum   OTU    X
+46   10.189088 cecum   OTU    X
+47    7.378849 cecum   OTU    X
+48    7.992226 cecum   OTU    X
+49    8.168831 cecum   OTU    X
+50    7.679529 cecum   OTU    X
+51    9.723269 cecum   OTU    X
+52    7.554853 cecum   OTU    X
+53    9.366978 cecum   OTU    X
+54   13.706339 cecum   OTU    X
+55    7.136422 cecum   OTU    X
+56    6.953442 cecum   OTU    X
+57    7.521047 cecum   OTU    X
+58    8.067441 cecum   OTU    X
+59   12.734411 cecum   OTU    X
+60   52.816296 cecum   OTU    X
+61    9.824876 cecum   OTU    X
+62    7.016630 cecum   OTU    X
+63    6.991660 cecum   OTU    X
+64    7.187293 cecum   OTU    X
+65    7.012563 cecum   OTU    X
+66   13.675229 cecum   OTU    X
+67    7.383079 cecum   OTU    X
+68    7.028883 cecum   OTU    X
+69    7.490736 cecum   OTU    X
+70    7.316475 cecum   OTU    X
+71    7.671529 cecum   OTU    X
+72    8.944810 cecum   OTU    X
+73    8.059831 cecum   OTU    X
+74    6.980777 cecum   OTU    X
+75    7.371010 cecum   OTU    X
+76    7.292105 cecum   OTU    X
+77    7.360545 cecum   OTU    X
+78   15.710617 cecum   OTU    X
+79    8.224556 cecum   OTU    X
+80    9.046855 cecum   OTU    X
+81   25.842388 cecum   OTU    X
+82   12.238491 cecum   OTU    X
+83    7.825153 cecum   OTU    X
+84    7.358307 cecum   OTU    X
+85    7.001727 cecum   OTU    X
+86   13.811562 cecum   OTU    X
+87    7.263128 cecum   OTU    X
+88    9.169396 cecum   OTU    X
+89    6.796192 cecum   OTU    X
+90    7.409991 cecum   OTU    X
+91   12.598246 cecum   OTU    X
+92    7.027737 cecum   OTU    X
+93    7.126301 cecum   OTU    X
+94    6.961866 cecum   OTU    X
+95    7.524309 cecum   OTU    X
+96   11.366528 cecum   OTU    X
+97    7.029430 cecum   OTU    X
+98   11.672544 cecum   OTU    X
+99   12.733266 cecum   OTU    X
+100   7.119074 cecum   OTU    X
+101   7.155905 cecum   OTU    X
+102   7.216270 cecum   OTU    X
+103  21.081040 cecum   OTU    X
+104  44.920736 cecum   OTU    X
+105   7.276093 cecum   OTU    X
+106   9.531733 cecum   OTU    X
+107   7.412280 cecum   OTU    X
+108   7.078484 cecum   OTU    X
+109   7.098918 cecum   OTU    X
+110   7.540248 cecum   OTU    X
+111   6.994005 cecum   OTU    X
+112   7.314032 cecum   OTU    X
+113   7.402570 cecum   OTU    X
+114   7.065738 cecum   OTU    X
+115  11.463897 cecum   OTU    X
+116   6.922743 cecum   OTU    X
+117   7.042714 cecum   OTU    X
+118   7.338250 cecum   OTU    X
+119   7.918384 cecum   OTU    X
+120   8.713391 cecum   OTU    X
+121  10.990031 cecum   OTU    X
+122  16.952086 cecum   OTU    X
+123   9.479953 cecum   OTU    X
+124   6.858530 cecum   OTU    X
+125   7.109095 cecum   OTU    X
+126   7.794747 cecum   OTU    X
+127   7.308102 cecum   OTU    X
+128   8.669503 cecum   OTU    X
+129  20.906041 cecum   OTU    X
+130  22.163585 cecum   OTU    X
+131  12.071707 cecum   OTU    X
+132   8.856301 cecum   OTU    X
+133   8.440387 cecum   OTU    X
+134   9.145271 cecum   OTU    X
+135  18.709316 cecum   OTU    X
+136   8.358699 cecum   OTU    X
+137   7.952129 cecum   OTU    X
+138   6.923488 cecum   OTU    X
+139   7.558596 cecum   OTU    X
+140   7.053951 cecum   OTU    X
+141   7.957929 cecum   OTU    X
+142   7.234289 cecum   OTU    X
+143   8.444185 cecum   OTU    X
+144   7.512762 cecum   OTU    X
+145  12.981320 cecum   OTU    X
+146   6.917281 cecum   OTU    X
+147   7.494634 cecum   OTU    X
+148   7.156592 cecum   OTU    X
+149   9.945603 cecum   OTU    X
+150   8.237717 cecum   OTU    X
+151   8.821824 cecum   OTU    X
+152   7.089779 cecum   OTU    X
+153   7.016116 cecum   OTU    X
+154   7.006916 cecum   OTU    X
+155  10.613976 cecum   OTU    X
+156   9.859103 cecum   OTU    X
+157   7.428481 cecum   OTU    X
+158  10.159332 cecum   OTU    X
+159  11.388293 cecum   OTU    X
+160   8.187428 cecum   OTU    X
+161   8.301020 cecum   OTU    X
+162   7.828983 cecum   OTU    X
+163   7.526838 cecum   OTU    X
+164   7.083008 cecum   OTU    X
+165  16.419074 cecum   OTU    X
+166   7.243667 cecum   OTU    X
+167   7.194404 cecum   OTU    X
+168   7.121017 cecum   OTU    X
+169   6.973161 cecum   OTU    X
+170  10.068629 cecum   OTU    X
+171   6.918800 cecum   OTU    X
+172   6.993881 cecum   OTU    X
+173  12.190404 cecum   OTU    X
+174  10.092943 cecum   OTU    X
+175   7.090432 cecum   OTU    X
+176   7.083241 cecum   OTU    X
+177  15.191352 cecum   OTU    X
+178  15.491403 cecum   OTU    X
+179   8.600898 cecum   OTU    X
+180   7.175774 cecum   OTU    X
+181   7.221993 cecum   OTU    X
+182   7.047297 cecum   OTU    X
+183   7.086927 cecum   OTU    X
+184   7.998399 cecum   OTU    X
+185   7.001733 cecum   OTU    X
+186   7.012030 cecum   OTU    X
+187  13.462141 cecum   OTU    X
+188   6.977482 cecum   OTU    X
+189   8.032289 cecum   OTU    X
+190   8.116714 cecum   OTU    X
+191   7.980710 cecum   OTU    X
+192  11.606376 cecum   OTU    X
+193   7.052428 cecum   OTU    X
+194   7.273318 cecum   OTU    X
+195   7.265245 cecum   OTU    X
+196   7.873464 cecum   OTU    X
+197   8.964100 cecum   OTU    X
+198   7.028920 cecum   OTU    X
+199  10.577421 cecum   OTU    X
+200   7.094632 cecum   OTU    X
+201  11.741604 cecum   OTU    X
+202   7.969696 cecum   OTU    X
+203   7.103768 cecum   OTU    X
+204   7.930128 cecum   OTU    X
+205  19.600219 cecum   OTU    X
+206  73.880413 cecum   OTU    X
+207   7.080071 cecum   OTU    X
+208   7.959263 cecum   OTU    X
+209   8.231480 cecum   OTU    X
+210   7.077528 cecum   OTU    X
+211   7.642928 cecum   OTU    X
+212  10.453848 cecum   OTU    X
+213   7.149011 cecum   OTU    X
+214   8.450794 cecum   OTU    X
+215   7.551950 cecum   OTU    X
+216   6.797186 cecum   OTU    X</code></pre>
+<pre class="r"><code>##extrating phenotypes that are created than 10
+apap &lt;- apa[which(apa$&quot;0.01&quot; &gt;= 9),][1]
+apxp &lt;- apx[which(apx$&quot;0.01&quot; &gt;= 11),][1]
+phenos &lt;- unique(rbind(apap, apxp))
+
+#extracting columns out that match phenos
+csq.dd &lt;- csq[,colnames(csq) %in% as.character(phenos[,1])]
+
+hist.data.frame(csq.dd)</code></pre>
+<p><img src="figure/heatmap_clustering_adj_0.05_black_otu.Rmd/otu%20cecum-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/heatmap_clustering_adj_0.05_black_otu.Rmd/otu%20cecum-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/heatmap_clustering_adj_0.05_black_otu.Rmd/otu%20cecum-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/heatmap_clustering_adj_0.05_black_otu.Rmd/otu%20cecum-4.png" width="672" style="display: block; margin: auto;" /><img src="figure/heatmap_clustering_adj_0.05_black_otu.Rmd/otu%20cecum-5.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>##selecting out random permutation for those under 10.
+#choosing random 0.01 cutoff for X &amp; autosomes
+a01 &lt;- sample(apa[which(apa$&quot;0.01&quot; &lt; 9),]$`0.05`, 1)
+#a01 &lt;- min(apa$`0.05`)
+print(a01)</code></pre>
+<pre><code>[1] 7.51972</code></pre>
+<pre class="r"><code>x01 &lt;- sample(apx[which(apx$&quot;0.01&quot; &lt; 11),]$`0.05`, 1)
+#x01 &lt;- min(apx$`0.05`)
+print(x01)</code></pre>
+<pre><code>[1] 7.446543</code></pre>
+<div id="figures" class="section level4">
+<h4>Figures</h4>
+<pre class="r"><code>#for(df in 1:length(files)){
+   
+#  pdf(paste0(&quot;/Users/corneb/Documents/MyJax/CS/Projects/Bubier/Figures/corneb/output/qtlmapping.heatmap_cluster_&quot;,files[df],&quot;_&quot;,level,&quot;_run14_max-lod-8.pdf&quot;), width = 14, height = 7)
+
+  x &lt;- get(files[df])
+  x[is.na(x)] &lt;- 0
+  x.matrix &lt;- as.matrix(t(x))
+  x.dendro &lt;- as.dendrogram(hclust(d = dist(x = x.matrix)))
+
+  # Create dendro
+  dendro.plot &lt;- ggdendrogram(data = x.dendro, rotate = TRUE) + 
+                 theme(axis.text.y = element_blank(), 
+                       axis.text.x = element_blank())
+
+  xt &lt;- as.data.frame(t(x))
+  xt$entity &lt;- rownames(xt)
+  herit.df$entity = rownames(herit.df)
+  xth &lt;- merge(herit.df, xt, by=c(&quot;entity&quot;), all.y=T)
+  
+  xh.long &lt;- melt(xth, id=c(&quot;entity&quot;))
+  xh.long$chr &lt;- sapply(strsplit(as.character(xh.long$variable),&#39;_&#39;, fixed = TRUE),function(x) x[1])
+  xh.long[xh.long$chr == xh.long$variable,]$chr &lt;- &quot;herit&quot;
+  xh.long$chr &lt;- factor(xh.long$chr, levels=c(&quot;herit&quot;,1:19,&quot;X&quot;))
+
+  min = min(xh.long$value)
+  max = max(xh.long$value)
+  
+  col.max = ifelse(max &gt; floor(min(a01,x01)), max+1, floor(min(a01,x01))+1)
+  
+  ColorRamp   &lt;- brewer.pal(n=length(min(a01,x01):col.max), &quot;YlOrRd&quot;)</code></pre>
+<pre><code>Warning in brewer.pal(n = length(min(a01, x01):col.max), &quot;YlOrRd&quot;): n too large, allowed maximum for palette YlOrRd is 9
+Returning the palette you asked for with that many colors</code></pre>
+<pre class="r"><code>  #colours &lt;- rbind(data.frame(ColorRamp=rep(&quot;white&quot;, each=(floor(min(a01,x01))-1))), as.data.frame(ColorRamp))
+
+  xh.order &lt;- order.dendrogram(x.dendro)
+  xh.long$entity &lt;- factor(x = xh.long$entity, 
+                           levels = xth$entity[xh.order], 
+                           ordered = TRUE)
+  xh.long$category &lt;- ifelse(xh.long$chr == &quot;herit&quot;, &quot;heritability&quot;, 
+                      ifelse(xh.long$chr == &quot;X&quot;, &quot;X&quot;, &quot;auto&quot;))
+
+  heatmap.plot.2 &lt;-ggplot() +
+                   geom_raster(data = xh.long[xh.long$category == &quot;auto&quot;,], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradientn(limits = c(a01,col.max),colours=ColorRamp, name = &quot;LOD score&quot;,na.value = &#39;black&#39;) +
+                   new_scale_fill() +
+                   geom_raster(data = xh.long[xh.long$category == &quot;X&quot;,], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradientn(limits = c(x01,col.max),colours=ColorRamp, name = &quot;LOD score&quot;,na.value = &#39;black&#39;) +
+                   new_scale_fill() +
+                   geom_raster(data = xh.long[xh.long$category == &quot;heritability&quot;,], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradient(low = &quot;lightblue&quot;, high = &quot;darkblue&quot;, name = &quot;heritability&quot;) +
+                   facet_grid(~ chr,scales = &quot;free&quot;, space = &quot;free_y&quot;) +
+                   ggtitle(paste0(&quot;QTL Mapping &amp; Heritability - &quot;, level,&quot;:&quot;, origin)) +
+                   theme(axis.text.x = element_blank(),
+                         axis.text.y = element_text(size = 5),
+                         axis.ticks.x = element_blank(),
+                         plot.title = element_text(hjust = 0.5),
+                         legend.position = &quot;bottom&quot;)
+
+  grid.newpage()
+  print(heatmap.plot.2, vp = viewport(x = 0.4, y = 0.5, width = 0.8, height = 1.0))
+  print(dendro.plot, vp = viewport(x = 0.90, y = 0.53, width = 0.2, height = 0.79))</code></pre>
+<p><img src="figure/heatmap_clustering_adj_0.05_black_otu.Rmd/otu%20figures%20cecum-1.png" width="912" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>  #dev.off()
+  
+ #}</code></pre>
+</div>
+<div id="peaks" class="section level4">
+<h4>Peaks</h4>
+<pre class="r"><code>  chr = sapply(strsplit(rownames(x),&#39;_&#39;, fixed = TRUE),function(x) x[1])
+  peaks.a &lt;- find_peaks(x[chr != &quot;X&quot;,] ,map, threshold = a01)
+  peaks.x &lt;- find_peaks(x[chr == &quot;X&quot;,] ,map, threshold = x01) 
+  
+  peaks &lt;- rbind(peaks.a, peaks.x)
+  #peaks$origin = origin
+  print(peaks)</code></pre>
+<pre><code>   lodindex                                  lodcolumn chr       pos       lod
+1         1        OTU_60_unclassified_Lachnospiraceae  10 26.275063  8.001821
+2         6           OTU_2_unclassified_Bacteroidales  10 16.675063  7.533343
+3        17        OTU_35_unclassified_Lachnospiraceae  10  7.435063  7.632770
+4        18     OTU_34_unclassified_Porphyromonadaceae   5 32.351509  9.032420
+5        26     OTU_21_unclassified_Porphyromonadaceae  18 22.460185  8.371745
+6        61       OTU_142_unclassified_Ruminococcaceae   2 79.706097  7.630647
+7        62                      OTU_71_Eisenbergiella   6 46.461170  7.674976
+8        95                         OTU_46_Barnesiella  18 31.000185  7.545914
+9        98       OTU_475_unclassified_Lachnospiraceae  11  9.184624  8.591563
+10      114                    OTU_94_Clostridium_XlVa  17 18.963576  7.692108
+11      124       OTU_232_unclassified_Lachnospiraceae  11 21.824624  7.950980
+12      127       OTU_288_unclassified_Ruminococcaceae   2 27.126097  8.388569
+13      143                        OTU_247_Anaerovorax   4 11.521016  7.879123
+14      149                      OTU_527_Ruminococcus2   3 53.214876  9.188468
+15      152                        OTU_116_Coprococcus  12 18.698885  8.035180
+16      190 OTU_168_Erysipelotrichaceae_incertae_sedis  13 34.378167  7.834181
+17      217       OTU_174_unclassified_Lachnospiraceae  10  6.815063  7.749423
+18      227                   OTU_310_Clostridium_XlVa  16 52.348170  7.713622
+19      235       OTU_238_unclassified_Lachnospiraceae  10  5.055063  8.195384
+20      239       OTU_203_unclassified_Ruminococcaceae   2 40.526097  8.560034
+21      259       OTU_100_unclassified_Lachnospiraceae  19 11.291727  7.654691
+22      275                      OTU_170_Anaerotruncus  15 11.786880  7.568878
+23      282                        OTU_123_Barnesiella   2 38.566097  7.648403
+24      302                         OTU_9_Anaerostipes   2 23.466097  7.538231
+25      314       OTU_571_unclassified_Lachnospiraceae   3 58.594876  7.578589
+26      326       OTU_481_unclassified_Ruminococcaceae  15 36.506880  7.959234
+27      332                          OTU_292_Roseburia  18 19.580185  7.817342
+28      333                      OTU_353_Oscillibacter   2 35.986097  8.146738
+29      351            OTU_328_unclassified_Firmicutes   2 51.906097  7.934137
+30      354                        OTU_495_Barnesiella  11 54.704624  8.396912
+31      355                        OTU_244_Mobilitalea   1 90.649554  7.696122
+32      358       OTU_223_unclassified_Lachnospiraceae   2 26.606097  8.722894
+33      360                       OTU_68_Enterorhabdus  18 30.960185  8.487211
+34      361       OTU_289_unclassified_Lachnospiraceae  16  5.348170 14.880709
+35      366                      OTU_496_Acetatifactor  16  5.108170 15.302078
+36      366                      OTU_496_Acetatifactor  19 49.151727  7.631699
+37      368       OTU_204_unclassified_Lachnospiraceae  17 30.003576  7.742755
+38      372         OTU_251_unclassified_Clostridiales   6 28.121170  7.882725
+39      374                              OTU_234_Dorea   4  2.601016 11.013873
+40      377                     OTU_270_Eisenbergiella   5 11.271509 15.618324
+41      377                     OTU_270_Eisenbergiella  13 27.718167 14.894892
+42      377                     OTU_270_Eisenbergiella  19 37.891727  9.205371
+43      378               OTU_109_Escherichia_Shigella  11 47.284624  9.061597
+44      386       OTU_325_unclassified_Ruminococcaceae   7 57.111082  8.148332
+45      388     OTU_300_unclassified_Coriobacteriaceae   2 81.906097  9.189856
+46      389            OTU_347_unclassified_Firmicutes  17 57.163576  8.480468
+47      391    OTU_161_unclassified_Porphyromonadaceae   2 81.846097 10.553469
+48      391    OTU_161_unclassified_Porphyromonadaceae   5 36.651509  7.559500
+49      391    OTU_161_unclassified_Porphyromonadaceae  13 31.038167  7.538482
+50      391    OTU_161_unclassified_Porphyromonadaceae  17 20.403576  9.712093
+51      392                           OTU_82_Alistipes  12 34.558885  7.602778
+52      392                           OTU_82_Alistipes  15 38.046880 11.407044
+53       32       OTU_157_unclassified_Lachnospiraceae   X 14.542641  8.273168
+54       34                        OTU_97_Ruminococcus   X 36.532641  7.928854
+55       82                       OTU_5_Eisenbergiella   X 72.652641  8.130000
+56      127       OTU_288_unclassified_Ruminococcaceae   X 58.602641  7.988382
+57      145               OTU_156_Pseudoflavonifractor   X 63.522641  8.335402
+58      361       OTU_289_unclassified_Lachnospiraceae   X 37.662641  8.728629
+59      378               OTU_109_Escherichia_Shigella   X 37.382641 20.065206
+60      389            OTU_347_unclassified_Firmicutes   X 37.402641 14.984735</code></pre>
+<p>####Stool</p>
+<p>#####Permutations</p>
+<pre class="r"><code>files &lt;- grep(&quot;lod.sens.all.s&quot;,names(.GlobalEnv),value=TRUE)
+for(df in 1:length(files)){
+   
+#  pdf(paste0(&quot;/Users/corneb/Documents/MyJax/CS/Projects/Bubier/Figures/corneb/output/qtlmapping.heatmap_cluster_&quot;,files[df],&quot;_&quot;,level,&quot;_run14_max-lod-8.pdf&quot;), width = 14, height = 7)
+
+  st &lt;- sapply(strsplit(files[df],&#39;.&#39;, fixed = TRUE),function(x) x[4])
+  if(st == &#39;c&#39;){
+      herit.df &lt;- as.data.frame(herit.c)
+      origin = &quot;cecum&quot;
+      apa = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_cecum_run14_a.cutoffs.csv&quot;))
+      colnames(apa) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apa))
+      print(apa)
+      apx = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_cecum_run14_x.cutoffs.csv&quot;))
+      colnames(apx) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apx))
+      print(apx)
+  }else{
+      herit.df &lt;- as.data.frame(herit.s)
+      origin = &quot;stool&quot;
+      apa = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_stool_run14_a.cutoffs.csv&quot;))
+      colnames(apa) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apa))
+      print(apa)
+      apx = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_stool_run14_x.cutoffs.csv&quot;))
+      colnames(apx) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apx))
+      print(apx)
+  }
+  
+ }</code></pre>
+<pre><code>                                                   0.01      0.05       0.1
+1                         OTU_1_Lactobacillus  8.571857  7.984859  7.400202
+2         OTU_10_unclassified_Lachnospiraceae  9.297763  8.112569  7.672720
+3        OTU_102_unclassified_Lachnospiraceae 14.179655 10.311248  8.589316
+4                    OTU_105_Clostridium_XlVa 34.005059 18.295167 14.673578
+5        OTU_106_unclassified_Lachnospiraceae  9.108012  7.961614  7.516463
+6                    OTU_108_Fusicatenibacter 22.992002 12.387976 10.290805
+7      OTU_11_unclassified_Porphyromonadaceae  8.760796  8.056625  7.542806
+8                      OTU_112_Eisenbergiella 19.559159 12.514857  9.807693
+9        OTU_117_unclassified_Ruminococcaceae 10.677129  9.253961  8.404665
+10       OTU_119_unclassified_Lachnospiraceae  9.258146  8.133773  7.659957
+11         OTU_125_unclassified_Clostridiales 18.009698 11.292034  9.519420
+12                      OTU_134_Ruminococcus2  9.122998  8.097929  7.682006
+13                      OTU_139_Ruminococcus2  9.899694  8.587645  7.997133
+14                   OTU_14_Clostridium_XVIII  9.837969  8.594996  7.940330
+15       OTU_142_unclassified_Ruminococcaceae  9.179464  8.080598  7.617243
+16       OTU_145_unclassified_Ruminococcaceae 10.083412  8.517919  7.821768
+17                   OTU_146_Clostridium_XlVa 11.940670  9.332657  8.269681
+18                      OTU_149_Oscillibacter  9.543025  8.190785  7.561361
+19       OTU_154_unclassified_Lachnospiraceae 16.452363 12.213630  9.840597
+20       OTU_159_unclassified_Lachnospiraceae  8.703922  7.873601  7.551058
+21                        OTU_160_Barnesiella  9.916734  8.528907  7.881595
+22 OTU_168_Erysipelotrichaceae_incertae_sedis  9.172053  8.222596  7.760587
+23        OTU_17_unclassified_Lachnospiraceae 14.696322 10.418622  8.733619
+24         OTU_171_unclassified_Clostridiales  9.988908  8.581490  8.042956
+25       OTU_174_unclassified_Lachnospiraceae 19.158560 11.733725 10.212029
+26       OTU_184_unclassified_Ruminococcaceae  8.970248  8.105440  7.632940
+27                         OTU_19_Barnesiella  9.108890  7.975685  7.559909
+28       OTU_190_unclassified_Lachnospiraceae  8.478086  7.994387  7.569672
+29       OTU_191_unclassified_Lachnospiraceae 14.762876  9.961950  8.609549
+30       OTU_198_unclassified_Lachnospiraceae  9.608520  8.208797  7.683871
+31           OTU_2_unclassified_Bacteroidales  8.820405  7.860852  7.446831
+32       OTU_202_unclassified_Lachnospiraceae 20.534200 12.617390 10.579605
+33                      OTU_210_Anaerotruncus  8.594613  8.033677  7.688003
+34                   OTU_221_Clostridium_XlVa  9.537796  8.117877  7.584348
+35                            OTU_226_Blautia  8.651185  7.931366  7.493140
+36       OTU_239_unclassified_Lachnospiraceae 56.405624 22.421592 16.002932
+37       OTU_248_unclassified_Lachnospiraceae 10.953068  9.210885  8.216119
+38       OTU_257_unclassified_Lachnospiraceae  8.936746  8.177098  7.705741
+39                      OTU_261_Anaerotruncus  9.012986  8.040006  7.572711
+40                          OTU_265_Roseburia 15.205374 10.418876  8.716282
+41                         OTU_279_Catabacter  9.776788  8.410110  7.949785
+42                   OTU_297_Clostridium_XlVb  8.898421  8.035730  7.471214
+43       OTU_298_unclassified_Lachnospiraceae 10.905787  9.251682  8.219497
+44         OTU_3_unclassified_Lachnospiraceae  8.764960  7.810863  7.432611
+45                       OTU_30_Lactobacillus 14.222214 10.029903  8.825708
+46       OTU_312_unclassified_Ruminococcaceae  8.761710  8.151164  7.625554
+47      OTU_33_unclassified_Coriobacteriaceae  9.702883  8.574347  7.962006
+48         OTU_331_unclassified_Clostridiales 14.275162 11.364873  9.762487
+49                   OTU_333_Clostridium_XlVb  8.897756  8.123097  7.715429
+50                   OTU_342_Fusicatenibacter  8.757107  7.999118  7.632910
+51        OTU_36_unclassified_Lachnospiraceae  9.582167  8.421766  7.857438
+52       OTU_365_unclassified_Lachnospiraceae  9.722702  8.479992  7.887416
+53                    OTU_38_Clostridium_XlVa  8.960772  7.937226  7.520834
+54     OTU_39_unclassified_Porphyromonadaceae  8.993990  8.012578  7.580835
+55                     OTU_393_Eisenbergiella  9.087763  8.002655  7.516976
+56                          OTU_4_Anaerovorax  8.855954  7.936553  7.538374
+57        OTU_40_unclassified_Lachnospiraceae  8.605971  8.050137  7.546718
+58       OTU_403_unclassified_Lachnospiraceae 16.804056 10.633716  8.987986
+59                        OTU_407_Barnesiella  8.950904  7.983988  7.638925
+60            OTU_447_unclassified_Firmicutes 12.264385  9.701999  8.817188
+61        OTU_45_unclassified_Lachnospiraceae  8.862067  8.097674  7.684580
+62       OTU_467_unclassified_Lachnospiraceae  9.607535  8.239044  7.756342
+63                      OTU_47_Eisenbergiella  9.431174  8.404088  7.857437
+64       OTU_475_unclassified_Lachnospiraceae 13.565232 10.949944  9.250228
+65        OTU_49_unclassified_Lachnospiraceae  9.029896  7.986149  7.541786
+66       OTU_491_unclassified_Lachnospiraceae 17.232124 10.218695  8.505211
+67                       OTU_5_Eisenbergiella  9.540510  8.170910  7.768827
+68        OTU_52_unclassified_Lachnospiraceae  9.024733  8.015866  7.620575
+69                      OTU_527_Ruminococcus2  9.495638  8.291585  7.798770
+70                    OTU_53_Clostridium_XlVa  9.134723  8.147338  7.763160
+71       OTU_536_unclassified_Ruminococcaceae 12.033346 10.025534  8.847203
+72       OTU_544_unclassified_Lachnospiraceae  9.240543  8.047495  7.640979
+73                           OTU_56_Roseburia 10.081044  8.775656  7.964569
+74        OTU_61_unclassified_Lachnospiraceae 12.623707  9.313695  8.498738
+75          OTU_64_unclassified_Clostridiales  8.934948  7.980622  7.538217
+76                    OTU_67_Fusicatenibacter 21.755519 12.713024 10.523420
+77                      OTU_69_Butyricicoccus 12.627856  9.675363  8.433700
+78                        OTU_7_Enterorhabdus  9.519038  8.269515  7.669684
+79                      OTU_71_Eisenbergiella 10.560469  9.030333  8.262325
+80        OTU_72_unclassified_Lachnospiraceae  9.742460  8.264158  7.764128
+81                      OTU_73_Clostridium_IV  8.865212  8.002164  7.523753
+82        OTU_84_unclassified_Lachnospiraceae  9.328137  8.241495  7.781986
+83                       OTU_85_Oscillibacter  9.572447  8.528149  7.880770
+84        OTU_87_unclassified_Lachnospiraceae 18.058074 10.878347  9.214865
+85                      OTU_88_Intestinimonas  9.436033  8.212990  7.745282
+86                         OTU_90_Akkermansia 11.143759  9.769287  8.710869
+87        OTU_91_unclassified_Ruminococcaceae  9.558119  8.336388  7.805117
+88                    OTU_94_Clostridium_XlVa  9.037590  8.142394  7.794422
+    type level      chrs
+1  stool   OTU autosomes
+2  stool   OTU autosomes
+3  stool   OTU autosomes
+4  stool   OTU autosomes
+5  stool   OTU autosomes
+6  stool   OTU autosomes
+7  stool   OTU autosomes
+8  stool   OTU autosomes
+9  stool   OTU autosomes
+10 stool   OTU autosomes
+11 stool   OTU autosomes
+12 stool   OTU autosomes
+13 stool   OTU autosomes
+14 stool   OTU autosomes
+15 stool   OTU autosomes
+16 stool   OTU autosomes
+17 stool   OTU autosomes
+18 stool   OTU autosomes
+19 stool   OTU autosomes
+20 stool   OTU autosomes
+21 stool   OTU autosomes
+22 stool   OTU autosomes
+23 stool   OTU autosomes
+24 stool   OTU autosomes
+25 stool   OTU autosomes
+26 stool   OTU autosomes
+27 stool   OTU autosomes
+28 stool   OTU autosomes
+29 stool   OTU autosomes
+30 stool   OTU autosomes
+31 stool   OTU autosomes
+32 stool   OTU autosomes
+33 stool   OTU autosomes
+34 stool   OTU autosomes
+35 stool   OTU autosomes
+36 stool   OTU autosomes
+37 stool   OTU autosomes
+38 stool   OTU autosomes
+39 stool   OTU autosomes
+40 stool   OTU autosomes
+41 stool   OTU autosomes
+42 stool   OTU autosomes
+43 stool   OTU autosomes
+44 stool   OTU autosomes
+45 stool   OTU autosomes
+46 stool   OTU autosomes
+47 stool   OTU autosomes
+48 stool   OTU autosomes
+49 stool   OTU autosomes
+50 stool   OTU autosomes
+51 stool   OTU autosomes
+52 stool   OTU autosomes
+53 stool   OTU autosomes
+54 stool   OTU autosomes
+55 stool   OTU autosomes
+56 stool   OTU autosomes
+57 stool   OTU autosomes
+58 stool   OTU autosomes
+59 stool   OTU autosomes
+60 stool   OTU autosomes
+61 stool   OTU autosomes
+62 stool   OTU autosomes
+63 stool   OTU autosomes
+64 stool   OTU autosomes
+65 stool   OTU autosomes
+66 stool   OTU autosomes
+67 stool   OTU autosomes
+68 stool   OTU autosomes
+69 stool   OTU autosomes
+70 stool   OTU autosomes
+71 stool   OTU autosomes
+72 stool   OTU autosomes
+73 stool   OTU autosomes
+74 stool   OTU autosomes
+75 stool   OTU autosomes
+76 stool   OTU autosomes
+77 stool   OTU autosomes
+78 stool   OTU autosomes
+79 stool   OTU autosomes
+80 stool   OTU autosomes
+81 stool   OTU autosomes
+82 stool   OTU autosomes
+83 stool   OTU autosomes
+84 stool   OTU autosomes
+85 stool   OTU autosomes
+86 stool   OTU autosomes
+87 stool   OTU autosomes
+88 stool   OTU autosomes
+                                                   0.01      0.05       0.1
+1                         OTU_1_Lactobacillus  8.994787  7.851663  7.400394
+2         OTU_10_unclassified_Lachnospiraceae  9.224874  8.036504  7.524831
+3        OTU_102_unclassified_Lachnospiraceae 12.408460 10.371588  9.415246
+4                    OTU_105_Clostridium_XlVa 17.243217 14.689301 13.334257
+5        OTU_106_unclassified_Lachnospiraceae  9.169840  7.899368  7.516516
+6                    OTU_108_Fusicatenibacter 14.645586 11.853844 10.853668
+7      OTU_11_unclassified_Porphyromonadaceae  8.342727  7.619533  7.218583
+8                      OTU_112_Eisenbergiella 13.497351 11.251409 10.257267
+9        OTU_117_unclassified_Ruminococcaceae 11.058477  9.732139  8.918732
+10       OTU_119_unclassified_Lachnospiraceae  9.010705  8.053754  7.527588
+11         OTU_125_unclassified_Clostridiales 14.819152 10.953290 10.002342
+12                      OTU_134_Ruminococcus2  9.245331  8.117651  7.573136
+13                      OTU_139_Ruminococcus2  9.945618  8.810031  8.213106
+14                   OTU_14_Clostridium_XVIII 10.207557  9.342043  8.608584
+15       OTU_142_unclassified_Ruminococcaceae  9.203113  8.199540  7.663959
+16       OTU_145_unclassified_Ruminococcaceae  9.858332  8.559810  8.101381
+17                   OTU_146_Clostridium_XlVa 11.199091  9.646217  8.776130
+18                      OTU_149_Oscillibacter  9.614593  8.383711  7.916791
+19       OTU_154_unclassified_Lachnospiraceae 15.460863 12.328502 10.930604
+20       OTU_159_unclassified_Lachnospiraceae  9.089751  7.829320  7.349126
+21                        OTU_160_Barnesiella 10.124884  8.633867  7.984853
+22 OTU_168_Erysipelotrichaceae_incertae_sedis  9.649820  8.334566  7.804715
+23        OTU_17_unclassified_Lachnospiraceae 12.293078 10.400544  9.569942
+24         OTU_171_unclassified_Clostridiales 10.989226  9.316415  8.647191
+25       OTU_174_unclassified_Lachnospiraceae 14.140143 12.000073 10.953235
+26       OTU_184_unclassified_Ruminococcaceae  9.092402  7.903012  7.447182
+27                         OTU_19_Barnesiella  8.901689  8.054276  7.576253
+28       OTU_190_unclassified_Lachnospiraceae  8.886816  7.668826  7.272765
+29       OTU_191_unclassified_Lachnospiraceae 11.648235  9.813337  8.901136
+30       OTU_198_unclassified_Lachnospiraceae  9.499654  8.364565  7.838934
+31           OTU_2_unclassified_Bacteroidales  8.212583  7.651703  7.100243
+32       OTU_202_unclassified_Lachnospiraceae 16.587670 13.149915 11.869080
+33                      OTU_210_Anaerotruncus  8.614101  7.629387  7.181167
+34                   OTU_221_Clostridium_XlVa  9.239063  7.890200  7.431649
+35                            OTU_226_Blautia  8.827885  7.777170  7.380932
+36       OTU_239_unclassified_Lachnospiraceae 23.220965 17.427795 15.701480
+37       OTU_248_unclassified_Lachnospiraceae 10.236930  8.988213  8.456050
+38       OTU_257_unclassified_Lachnospiraceae  9.790235  8.332913  7.718056
+39                      OTU_261_Anaerotruncus  8.892996  7.849243  7.410287
+40                          OTU_265_Roseburia 11.451587  9.918824  9.253286
+41                         OTU_279_Catabacter 10.980111  9.108993  8.535752
+42                   OTU_297_Clostridium_XlVb  8.636950  7.748058  7.312352
+43       OTU_298_unclassified_Lachnospiraceae 11.009889  9.671315  8.927007
+44         OTU_3_unclassified_Lachnospiraceae  8.743172  7.872058  7.442633
+45                       OTU_30_Lactobacillus 11.958586 10.133688  9.336875
+46       OTU_312_unclassified_Ruminococcaceae  9.213771  8.206083  7.650407
+47      OTU_33_unclassified_Coriobacteriaceae 11.162173  9.248222  8.500486
+48         OTU_331_unclassified_Clostridiales 14.582164 12.000780 10.943570
+49                   OTU_333_Clostridium_XlVb 10.027649  8.549378  7.999630
+50                   OTU_342_Fusicatenibacter  8.762693  7.764917  7.290452
+51        OTU_36_unclassified_Lachnospiraceae  9.861088  8.800670  8.173374
+52       OTU_365_unclassified_Lachnospiraceae 10.300463  9.024672  8.201594
+53                    OTU_38_Clostridium_XlVa  8.478883  7.651817  7.349466
+54     OTU_39_unclassified_Porphyromonadaceae  8.940020  7.793903  7.347930
+55                     OTU_393_Eisenbergiella  9.454115  7.987010  7.633410
+56                          OTU_4_Anaerovorax  9.353848  8.063449  7.627342
+57        OTU_40_unclassified_Lachnospiraceae  8.642128  7.862448  7.363463
+58       OTU_403_unclassified_Lachnospiraceae 11.658062  9.961301  9.395509
+59                        OTU_407_Barnesiella  9.286145  7.917305  7.549879
+60            OTU_447_unclassified_Firmicutes 13.128057 11.022423 10.000571
+61        OTU_45_unclassified_Lachnospiraceae  9.494449  8.258210  7.684737
+62       OTU_467_unclassified_Lachnospiraceae  9.881155  8.463638  7.938390
+63                      OTU_47_Eisenbergiella 10.512764  9.030535  8.458882
+64       OTU_475_unclassified_Lachnospiraceae 13.777498 11.199316 10.304012
+65        OTU_49_unclassified_Lachnospiraceae  9.056970  8.176960  7.682297
+66       OTU_491_unclassified_Lachnospiraceae 11.996491  9.817725  9.109477
+67                       OTU_5_Eisenbergiella  9.730829  8.401856  7.898878
+68        OTU_52_unclassified_Lachnospiraceae  9.812955  8.098924  7.661600
+69                      OTU_527_Ruminococcus2 10.173737  8.872177  8.197280
+70                    OTU_53_Clostridium_XlVa  9.438211  8.078220  7.576073
+71       OTU_536_unclassified_Ruminococcaceae 14.659903 10.584680  9.619318
+72       OTU_544_unclassified_Lachnospiraceae  9.846967  8.488530  7.875240
+73                           OTU_56_Roseburia 10.041121  8.291793  7.840495
+74        OTU_61_unclassified_Lachnospiraceae 11.704189  9.717705  9.054959
+75          OTU_64_unclassified_Clostridiales  8.861214  7.771495  7.310802
+76                    OTU_67_Fusicatenibacter 15.587135 12.569451 11.404035
+77                      OTU_69_Butyricicoccus 11.184666  9.601170  8.882494
+78                        OTU_7_Enterorhabdus  9.112816  8.161696  7.693749
+79                      OTU_71_Eisenbergiella 11.500850  9.819299  9.003909
+80        OTU_72_unclassified_Lachnospiraceae 10.063666  8.628595  8.028496
+81                      OTU_73_Clostridium_IV  9.254810  8.053531  7.549079
+82        OTU_84_unclassified_Lachnospiraceae  9.955909  8.814249  8.040214
+83                       OTU_85_Oscillibacter 10.531058  8.779600  8.091478
+84        OTU_87_unclassified_Lachnospiraceae 11.780136 10.346239  9.576137
+85                      OTU_88_Intestinimonas 10.045810  8.889237  8.261377
+86                         OTU_90_Akkermansia 12.597827 10.472868  9.584299
+87        OTU_91_unclassified_Ruminococcaceae  9.903196  8.544956  7.956780
+88                    OTU_94_Clostridium_XlVa  9.319939  8.220950  7.608134
+    type level chrs
+1  stool   OTU    X
+2  stool   OTU    X
+3  stool   OTU    X
+4  stool   OTU    X
+5  stool   OTU    X
+6  stool   OTU    X
+7  stool   OTU    X
+8  stool   OTU    X
+9  stool   OTU    X
+10 stool   OTU    X
+11 stool   OTU    X
+12 stool   OTU    X
+13 stool   OTU    X
+14 stool   OTU    X
+15 stool   OTU    X
+16 stool   OTU    X
+17 stool   OTU    X
+18 stool   OTU    X
+19 stool   OTU    X
+20 stool   OTU    X
+21 stool   OTU    X
+22 stool   OTU    X
+23 stool   OTU    X
+24 stool   OTU    X
+25 stool   OTU    X
+26 stool   OTU    X
+27 stool   OTU    X
+28 stool   OTU    X
+29 stool   OTU    X
+30 stool   OTU    X
+31 stool   OTU    X
+32 stool   OTU    X
+33 stool   OTU    X
+34 stool   OTU    X
+35 stool   OTU    X
+36 stool   OTU    X
+37 stool   OTU    X
+38 stool   OTU    X
+39 stool   OTU    X
+40 stool   OTU    X
+41 stool   OTU    X
+42 stool   OTU    X
+43 stool   OTU    X
+44 stool   OTU    X
+45 stool   OTU    X
+46 stool   OTU    X
+47 stool   OTU    X
+48 stool   OTU    X
+49 stool   OTU    X
+50 stool   OTU    X
+51 stool   OTU    X
+52 stool   OTU    X
+53 stool   OTU    X
+54 stool   OTU    X
+55 stool   OTU    X
+56 stool   OTU    X
+57 stool   OTU    X
+58 stool   OTU    X
+59 stool   OTU    X
+60 stool   OTU    X
+61 stool   OTU    X
+62 stool   OTU    X
+63 stool   OTU    X
+64 stool   OTU    X
+65 stool   OTU    X
+66 stool   OTU    X
+67 stool   OTU    X
+68 stool   OTU    X
+69 stool   OTU    X
+70 stool   OTU    X
+71 stool   OTU    X
+72 stool   OTU    X
+73 stool   OTU    X
+74 stool   OTU    X
+75 stool   OTU    X
+76 stool   OTU    X
+77 stool   OTU    X
+78 stool   OTU    X
+79 stool   OTU    X
+80 stool   OTU    X
+81 stool   OTU    X
+82 stool   OTU    X
+83 stool   OTU    X
+84 stool   OTU    X
+85 stool   OTU    X
+86 stool   OTU    X
+87 stool   OTU    X
+88 stool   OTU    X</code></pre>
+<pre class="r"><code>##extrating phenotypes that are created than 10
+apap &lt;- apa[which(apa$&quot;0.01&quot; &gt;= 9),][1]
+apxp &lt;- apx[which(apx$&quot;0.01&quot; &gt;= 11),][1]
+phenos &lt;- unique(rbind(apap, apxp))
+
+#extracting columns out that match phenos
+ssq.dd &lt;- ssq[,colnames(ssq) %in% as.character(phenos[,1])]
+
+hist.data.frame(ssq.dd)</code></pre>
+<p><img src="figure/heatmap_clustering_adj_0.05_black_otu.Rmd/otu%20stool-1.png" width="672" style="display: block; margin: auto;" /><img src="figure/heatmap_clustering_adj_0.05_black_otu.Rmd/otu%20stool-2.png" width="672" style="display: block; margin: auto;" /><img src="figure/heatmap_clustering_adj_0.05_black_otu.Rmd/otu%20stool-3.png" width="672" style="display: block; margin: auto;" /><img src="figure/heatmap_clustering_adj_0.05_black_otu.Rmd/otu%20stool-4.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>##selecting out random permutation for those under 10.
+#choosing random 0.01 cutoff for X &amp; autosomes
+a01 &lt;- sample(apa[which(apa$&quot;0.01&quot; &lt; 9),]$`0.05`, 1)
+#a01 &lt;- min(apa$`0.05`)
+print(a01)</code></pre>
+<pre><code>[1] 8.056625</code></pre>
+<pre class="r"><code>x01 &lt;- sample(apx[which(apx$&quot;0.01&quot; &lt; 11),]$`0.05`, 1)
+#x01 &lt;- min(apx$`0.05`)
+print(x01)</code></pre>
+<pre><code>[1] 7.771495</code></pre>
+</div>
+<div id="figures-1" class="section level4">
+<h4>Figures</h4>
+<pre class="r"><code>#for(df in 1:length(files)){
+   
+#  pdf(paste0(&quot;/Users/corneb/Documents/MyJax/CS/Projects/Bubier/Figures/corneb/output/qtlmapping.heatmap_cluster_&quot;,files[df],&quot;_&quot;,level,&quot;_run14_max-lod-8.pdf&quot;), width = 14, height = 7)
+
+  x &lt;- get(files[df])
+  x[is.na(x)] &lt;- 0
+  x.matrix &lt;- as.matrix(t(x))
+  x.dendro &lt;- as.dendrogram(hclust(d = dist(x = x.matrix)))
+
+  # Create dendro
+  dendro.plot &lt;- ggdendrogram(data = x.dendro, rotate = TRUE) + 
+                 theme(axis.text.y = element_blank(), 
+                       axis.text.x = element_blank())
+
+  xt &lt;- as.data.frame(t(x))
+  xt$entity &lt;- rownames(xt)
+  herit.df$entity = rownames(herit.df)
+  xth &lt;- merge(herit.df, xt, by=c(&quot;entity&quot;), all.y=T)
+  
+  xh.long &lt;- melt(xth, id=c(&quot;entity&quot;))
+  xh.long$chr &lt;- sapply(strsplit(as.character(xh.long$variable),&#39;_&#39;, fixed = TRUE),function(x) x[1])
+  xh.long[xh.long$chr == xh.long$variable,]$chr &lt;- &quot;herit&quot;
+  xh.long$chr &lt;- factor(xh.long$chr, levels=c(&quot;herit&quot;,1:19,&quot;X&quot;))
+
+  min = min(xh.long$value)
+  max = max(xh.long$value)
+  
+  col.max = ifelse(max &gt; floor(min(a01,x01)), max+1, floor(min(a01,x01))+1)
+  
+  ColorRamp   &lt;- brewer.pal(n=length(min(a01,x01):col.max), &quot;YlOrRd&quot;)</code></pre>
+<pre><code>Warning in brewer.pal(n = length(min(a01, x01):col.max), &quot;YlOrRd&quot;): n too large, allowed maximum for palette YlOrRd is 9
+Returning the palette you asked for with that many colors</code></pre>
+<pre class="r"><code>  #colours &lt;- rbind(data.frame(ColorRamp=rep(&quot;white&quot;, each=(floor(min(a01,x01))-1))), as.data.frame(ColorRamp))
+
+  xh.order &lt;- order.dendrogram(x.dendro)
+  xh.long$entity &lt;- factor(x = xh.long$entity, 
+                           levels = xth$entity[xh.order], 
+                           ordered = TRUE)
+  xh.long$category &lt;- ifelse(xh.long$chr == &quot;herit&quot;, &quot;heritability&quot;, 
+                      ifelse(xh.long$chr == &quot;X&quot;, &quot;X&quot;, &quot;auto&quot;))
+
+  heatmap.plot.2 &lt;-ggplot() +
+                   geom_raster(data = xh.long[xh.long$category == &quot;auto&quot;,], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradientn(limits = c(a01,col.max),colours=ColorRamp, name = &quot;LOD score&quot;,na.value = &#39;black&#39;) +
+                   new_scale_fill() +
+                   geom_raster(data = xh.long[xh.long$category == &quot;X&quot;,], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradientn(limits = c(x01,col.max),colours=ColorRamp, name = &quot;LOD score&quot;,na.value = &#39;black&#39;) +
+                   new_scale_fill() +
+                   geom_raster(data = xh.long[xh.long$category == &quot;heritability&quot;,], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradient(low = &quot;lightblue&quot;, high = &quot;darkblue&quot;, name = &quot;heritability&quot;) +
+                   facet_grid(~ chr,scales = &quot;free&quot;, space = &quot;free_y&quot;) +
+                   ggtitle(paste0(&quot;QTL Mapping &amp; Heritability - &quot;, level,&quot;:&quot;, origin)) +
+                   theme(axis.text.x = element_blank(),
+                         axis.text.y = element_text(size = 5),
+                         axis.ticks.x = element_blank(),
+                         plot.title = element_text(hjust = 0.5),
+                         legend.position = &quot;bottom&quot;)
+
+  grid.newpage()
+  print(heatmap.plot.2, vp = viewport(x = 0.4, y = 0.5, width = 0.8, height = 1.0))
+  print(dendro.plot, vp = viewport(x = 0.90, y = 0.53, width = 0.2, height = 0.79))</code></pre>
+<p><img src="figure/heatmap_clustering_adj_0.05_black_otu.Rmd/otu%20figures%20stool-1.png" width="912" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>  #dev.off()
+  
+ #}</code></pre>
+</div>
+<div id="peaks-1" class="section level4">
+<h4>Peaks</h4>
+<pre class="r"><code>  chr = sapply(strsplit(rownames(x),&#39;_&#39;, fixed = TRUE),function(x) x[1])
+  peaks.a &lt;- find_peaks(x[chr != &quot;X&quot;,] ,map, threshold = a01)
+  peaks.x &lt;- find_peaks(x[chr == &quot;X&quot;,] ,map, threshold = x01) 
+  
+  peaks &lt;- rbind(peaks.a, peaks.x)
+  #peaks$origin = origin
+  print(peaks)</code></pre>
+<pre><code>   lodindex                                lodcolumn chr       pos       lod
+1         4                   OTU_27_Syntrophococcus  11 60.444624  8.337770
+2        25                 OTU_146_Clostridium_XlVa   7 80.071082  8.479397
+3        29                   OTU_393_Eisenbergiella  11 60.444624 10.121356
+4        51     OTU_183_unclassified_Lachnospiraceae   6 70.661170  8.734434
+5        66                       OTU_19_Barnesiella  11 19.764624  8.503091
+6        71          OTU_260_unclassified_Firmicutes   2 43.546097  9.101959
+7        73                    OTU_210_Anaerotruncus   5 75.211509  8.618572
+8        75                 OTU_105_Clostridium_XlVa   2 42.866097 12.422683
+9        83       OTU_264_unclassified_Clostridiales   5 76.211509  8.071817
+10       83       OTU_264_unclassified_Clostridiales  11  5.904624  8.571708
+11       98     OTU_475_unclassified_Lachnospiraceae   2 44.406097  9.644412
+12      126     OTU_239_unclassified_Lachnospiraceae  13 12.158167  9.097052
+13      127     OTU_288_unclassified_Ruminococcaceae  14  5.469134  8.660972
+14      146                 OTU_108_Fusicatenibacter   2 42.706097 11.062747
+15      178          OTU_172_unclassified_Firmicutes  19 16.651727  8.193452
+16      183     OTU_211_unclassified_Lachnospiraceae  17 33.563576  8.090118
+17      187          OTU_241_unclassified_Firmicutes   7 65.731082  9.114165
+18      194       OTU_331_unclassified_Clostridiales  13 31.498167  8.607005
+19      196                    OTU_330_Oscillibacter   2 42.886097 30.828024
+20      199     OTU_175_unclassified_Lachnospiraceae   2 42.846097  8.919585
+21      204  OTU_111_unclassified_Porphyromonadaceae   6 48.301170  9.814766
+22      206     OTU_165_unclassified_Lachnospiraceae  15  5.826880  8.381776
+23      208       OTU_319_unclassified_Clostridiales  19 35.711727  8.405359
+24      214                      OTU_262_Barnesiella   8  7.574943  9.215854
+25      233 OTU_235_unclassified_Erysipelotrichaceae   2 44.466097 10.377789
+26      251          OTU_374_unclassified_Firmicutes  10 45.435063  8.232819
+27      259     OTU_100_unclassified_Lachnospiraceae   2 42.866097  9.183196
+28      264                 OTU_246_Clostridium_XlVa   1 63.769554  9.358473
+29      278     OTU_290_unclassified_Ruminococcaceae   1 21.029554  8.410440
+30      282                      OTU_123_Barnesiella   6 48.301170  9.544255
+31      291                       OTU_329_Catabacter   5 76.091509  8.603539
+32      316     OTU_284_unclassified_Ruminococcaceae   1 74.429554  8.128035
+33      316     OTU_284_unclassified_Ruminococcaceae   2 82.706097  8.281586
+34      323      OTU_57_unclassified_Lachnospiraceae   8  8.574943  8.171151
+35      323      OTU_57_unclassified_Lachnospiraceae  13 33.618167 10.994395
+36      333                    OTU_353_Oscillibacter   2 82.726097 24.170594
+37      333                    OTU_353_Oscillibacter   5  7.631509 19.151073
+38      333                    OTU_353_Oscillibacter   6 54.181170  8.435013
+39      338     OTU_460_unclassified_Lachnospiraceae   3 46.674876 11.543066
+40      338     OTU_460_unclassified_Lachnospiraceae  13 63.778167 11.781122
+41      343                    OTU_327_Oscillibacter   2 82.706097  9.525842
+42      343                    OTU_327_Oscillibacter   4 44.021016  8.275412
+43      343                    OTU_327_Oscillibacter   5  7.591509  8.121468
+44      344                   OTU_283_Flavonifractor  12 60.538885  8.732359
+45      364     OTU_141_unclassified_Lachnospiraceae   2 44.446097 10.211830
+46      368     OTU_204_unclassified_Lachnospiraceae   2 42.866097 13.170334
+47      369             OTU_285_Pseudoflavonifractor  15  7.986880  8.543187
+48      374                            OTU_234_Dorea  12 21.518885 10.070228
+49      377                   OTU_270_Eisenbergiella  19 28.031727 10.027626
+50      378             OTU_109_Escherichia_Shigella  19 15.011727  8.221167
+51      394     OTU_276_unclassified_Ruminococcaceae  15 49.086880  8.729501
+52       18   OTU_34_unclassified_Porphyromonadaceae   X 45.182641 10.405431
+53       22     OTU_191_unclassified_Lachnospiraceae   X 61.402641  9.223514
+54       63                    OTU_149_Oscillibacter   X 70.022641 10.085594
+55       70                    OTU_139_Ruminococcus2   X  3.522641  9.931035
+56       85      OTU_95_unclassified_Lachnospiraceae   X 37.442641  8.508899
+57       92                    OTU_509_Oscillibacter   X 34.062641  9.063522
+58      116        OTU_64_unclassified_Clostridiales   X 33.962641  8.383938
+59      140     OTU_312_unclassified_Ruminococcaceae   X 53.042641  7.839721
+60      177     OTU_313_unclassified_Lachnospiraceae   X 17.822641  7.826810
+61      199     OTU_175_unclassified_Lachnospiraceae   X 34.762641  9.177108
+62      202             OTU_205_Pseudoflavonifractor   X 42.882641  7.789773
+63      284                    OTU_195_Acetatifactor   X 14.502641  8.176306
+64      318                    OTU_504_Oscillibacter   X 66.022641  7.885741
+65      347                    OTU_464_Acetatifactor   X 14.502641  7.859156</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.2 (2019-12-12)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS Catalina 10.15.7
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8
+
+attached base packages:
+ [1] stats4    parallel  grid      stats     graphics  grDevices utils    
+ [8] datasets  methods   base     
+
+other attached packages:
+ [1] RCurl_1.98-1.3                     jsonlite_1.7.2                    
+ [3] DOQTL_1.19.0                       VariantAnnotation_1.30.1          
+ [5] Rsamtools_2.0.3                    SummarizedExperiment_1.16.1       
+ [7] DelayedArray_0.12.3                BiocParallel_1.20.1               
+ [9] matrixStats_0.59.0                 Biobase_2.46.0                    
+[11] BSgenome.Mmusculus.UCSC.mm10_1.4.0 BSgenome_1.52.0                   
+[13] rtracklayer_1.44.4                 Biostrings_2.54.0                 
+[15] XVector_0.26.0                     GenomicRanges_1.38.0              
+[17] GenomeInfoDb_1.22.1                IRanges_2.20.2                    
+[19] S4Vectors_0.24.4                   BiocGenerics_0.32.0               
+[21] Hmisc_4.5-0                        Formula_1.2-4                     
+[23] survival_3.1-8                     lattice_0.20-38                   
+[25] qtl2_0.22                          RColorBrewer_1.1-2                
+[27] ggnewscale_0.4.5                   dplyr_0.8.5                       
+[29] reshape2_1.4.4                     ggdendro_0.1.22                   
+[31] ggplot2_3.3.5                      workflowr_1.6.2                   
+
+loaded via a namespace (and not attached):
+  [1] backports_1.2.1          plyr_1.8.6               splines_3.6.2           
+  [4] digest_0.6.27            foreach_1.5.1            htmltools_0.5.1.1       
+  [7] regress_1.3-15           gdata_2.18.0             fansi_0.5.0             
+ [10] magrittr_2.0.1           checkmate_2.0.0          memoise_2.0.0           
+ [13] cluster_2.1.0            doParallel_1.0.15        QTLRel_1.6              
+ [16] annotate_1.64.0          prettyunits_1.1.1        jpeg_0.1-8.1            
+ [19] colorspace_2.0-2         blob_1.2.1               xfun_0.24               
+ [22] crayon_1.4.1             iterators_1.0.13         glue_1.4.2              
+ [25] gtable_0.3.0             zlibbioc_1.32.0          kernlab_0.9-29          
+ [28] Rhdf5lib_1.6.3           prabclus_2.3-2           DEoptimR_1.0-8          
+ [31] scales_1.1.1             DBI_1.1.1                Rcpp_1.0.7              
+ [34] xtable_1.8-4             progress_1.2.2           htmlTable_2.2.1         
+ [37] foreign_0.8-72           bit_4.0.4                mclust_5.4.6            
+ [40] htmlwidgets_1.5.3        httr_1.4.1               fpc_2.2-5               
+ [43] ellipsis_0.3.2           modeltools_0.2-23        farver_2.1.0            
+ [46] pkgconfig_2.0.3          XML_3.99-0.3             flexmix_2.3-15          
+ [49] nnet_7.3-12              utf8_1.2.1               labeling_0.4.2          
+ [52] tidyselect_1.0.0         rlang_0.4.11             later_1.0.0             
+ [55] AnnotationDbi_1.48.0     munsell_0.5.0            tools_3.6.2             
+ [58] cachem_1.0.5             RSQLite_2.2.7            evaluate_0.14           
+ [61] stringr_1.4.0            fastmap_1.1.0            yaml_2.2.1              
+ [64] knitr_1.33               bit64_4.0.5              fs_1.4.1                
+ [67] robustbase_0.93-6        purrr_0.3.4              whisker_0.4             
+ [70] biomaRt_2.40.5           compiler_3.6.2           rstudioapi_0.13         
+ [73] png_0.1-7                tibble_3.1.2             stringi_1.7.2           
+ [76] highr_0.9                annotationTools_1.58.0   GenomicFeatures_1.36.4  
+ [79] Matrix_1.2-18            vctrs_0.3.8              pillar_1.6.1            
+ [82] lifecycle_1.0.0          RUnit_0.4.32             data.table_1.14.0       
+ [85] bitops_1.0-7             corpcor_1.6.9            httpuv_1.5.2            
+ [88] R6_2.5.0                 latticeExtra_0.6-29      hwriter_1.3.2           
+ [91] promises_1.1.0           gridExtra_2.3            codetools_0.2-16        
+ [94] MASS_7.3-51.4            gtools_3.8.2             assertthat_0.2.1        
+ [97] rhdf5_2.28.1             rprojroot_1.3-2          withr_2.4.2             
+[100] GenomicAlignments_1.20.1 GenomeInfoDbData_1.2.2   diptest_0.75-7          
+[103] hms_0.5.3                rpart_4.1-15             class_7.3-15            
+[106] rmarkdown_2.1            git2r_0.26.1             base64enc_0.1-3         </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

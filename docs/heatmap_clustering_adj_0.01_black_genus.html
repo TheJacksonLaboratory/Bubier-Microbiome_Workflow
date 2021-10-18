@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Belinda Cornes" />
+
+<meta name="date" content="2021-12-10" />
+
+<title>Genus Heatmap [LOD &amp; Herit] (adjusted [0.01])</title>
+
+<script src="site_libs/header-attrs-2.1/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/spacelab.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+
+<link rel="icon" href="https://github.com/workflowr/workflowr-assets/raw/master/img/reproducible.png">
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Bubier Microbiome Workflow</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li>
+  <a href="https://github.com/thejacksonlaboratory/Bubier-Microbiome_Workflow">
+    <span class="fa fa-github"></span>
+     
+    Source code
+  </a>
+</li>
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Genus Heatmap [LOD &amp; Herit] (adjusted [0.01])</h1>
+<h4 class="author">Belinda Cornes</h4>
+<h4 class="date">12/10/2021</h4>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#genus">Genus</a></li>
+</ul>
+</div>
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2021-10-18
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 7 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 0
+</p>
+<p>
+<strong>Knit directory:</strong> <code>Bubier-Microbiome_Workflow/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.6.2). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguptodate"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>R Markdown file:</strong> up-to-date </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguptodate" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great! Since the R Markdown file has been committed to the Git repository, you know the exact version of the code that produced these results.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20211012code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20211012)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20211012code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20211012)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongcf92fdb"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> cf92fdb </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongcf92fdb" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility.
+</p>
+<p>
+The results in this page were generated with repository version cf92fdb. See the <em>Past versions</em> tab to see a history of the changes made to the R Markdown and HTML files.
+</p>
+<p>
+Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .DS_Store
+    Ignored:    analysis/.DS_Store
+
+Untracked files:
+    Untracked:  analysis/gbrs_distribution_gid.Rmd
+    Untracked:  analysis/gbrs_distribution_tid.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+
+<p>
+These are the previous versions of the repository in which changes were made to the R Markdown (<code>analysis/heatmap_clustering_adj_0.01_black_genus.Rmd</code>) and HTML (<code>docs/heatmap_clustering_adj_0.01_black_genus.html</code>) files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view the files as they were in that past version.
+</p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+cf92fdb
+</td>
+<td>
+Belinda Cornes
+</td>
+<td>
+2021-10-18
+</td>
+<td>
+heatmaps &amp; distribution
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<hr>
+</div>
+</div>
+</div>
+<div id="genus" class="section level3">
+<h3>Genus</h3>
+<pre class="r"><code>level = &quot;Genus&quot;
+
+load(paste0(&quot;/Users/corneb/Documents/MyJax/CS/Projects/Bubier/results/qtl.viewer/run14/results/&quot;,level,&quot;_ready.Rdata&quot;))
+
+#print(&quot;stool&quot;)
+lod.sens.all.s &lt;- as.data.frame(qtl.genus.sq.s)
+#print(ncol(lod.sens.all.s))
+
+#print(&quot;cecum&quot;)
+lod.sens.all.c &lt;- as.data.frame(qtl.genus.sq.c)
+#print(ncol(lod.sens.all.c))</code></pre>
+<p>####Cecum</p>
+<p>#####Permutations</p>
+<pre class="r"><code>files &lt;- grep(&quot;lod.sens.all.c&quot;,names(.GlobalEnv),value=TRUE)
+for(df in 1:length(files)){
+   
+#  pdf(paste0(&quot;/Users/corneb/Documents/MyJax/CS/Projects/Bubier/Figures/corneb/output/qtlmapping.heatmap_cluster_&quot;,files[df],&quot;_&quot;,level,&quot;_run14_max-lod-8.pdf&quot;), width = 14, height = 7)
+
+  st &lt;- sapply(strsplit(files[df],&#39;.&#39;, fixed = TRUE),function(x) x[4])
+  if(st == &#39;c&#39;){
+      herit.df &lt;- as.data.frame(herit.c)
+      origin = &quot;cecum&quot;
+      apa = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_cecum_run14_a.cutoffs.csv&quot;))
+      colnames(apa) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apa))
+      print(apa)
+      apx = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_cecum_run14_x.cutoffs.csv&quot;))
+      colnames(apx) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apx))
+      print(apx)
+  }else{
+      herit.df &lt;- as.data.frame(herit.s)
+      origin = &quot;stool&quot;
+      apa = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_stool_run14_a.cutoffs.csv&quot;))
+      colnames(apa) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apa))
+      print(apa)
+      apx = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_stool_run14_x.cutoffs.csv&quot;))
+      colnames(apx) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apx))
+      print(apx)
+  }
+  
+ }</code></pre>
+<pre><code>                                              0.01      0.05       0.1  type
+1                       g__Acetatifactor  8.477991  7.702204  7.292093 cecum
+2                         g__Akkermansia 10.610334  8.618241  7.780862 cecum
+3                           g__Alistipes 41.786916 18.947959 14.626024 cecum
+4                        g__Anaerofustis  8.588378  7.643276  7.292364 cecum
+5                             g__Blautia  8.653180  7.838755  7.287958 cecum
+6                      g__Butyricicoccus  9.007585  7.802642  7.287863 cecum
+7                        g__Butyrivibrio  8.951588  7.865337  7.348529 cecum
+8                      g__Clostridium_IV  8.632109  7.683522  7.325876 cecum
+9                    g__Clostridium_XlVa  8.337528  7.682833  7.243527 cecum
+10                   g__Clostridium_XlVb  9.521202  8.003633  7.532617 cecum
+11                        g__Coprococcus  8.819164  7.855633  7.356915 cecum
+12                              g__Dorea 16.183365 10.471637  8.962635 cecum
+13                     g__Eisenbergiella  8.586197  7.743918  7.396046 cecum
+14                      g__Enterorhabdus 10.043797  8.107258  7.477865 cecum
+15 g__Erysipelotrichaceae_incertae_sedis  9.669545  8.331114  7.651833 cecum
+16               g__Escherichia_Shigella 17.539805  9.648259  8.797027 cecum
+17                     g__Intestinimonas  8.459241  7.780167  7.284503 cecum
+18                      g__Lactobacillus 10.218920  8.359674  7.763429 cecum
+19                      g__Lactonifactor  9.502613  7.940522  7.443457 cecum
+20                          g__Murimonas  8.382501  7.565167  7.205929 cecum
+21                          g__Roseburia  8.946272  7.837971  7.414097 cecum
+22                       g__Ruminococcus  8.524980  7.873464  7.447995 cecum
+23                      g__Ruminococcus2  9.401206  7.919158  7.479386 cecum
+24              g__unclassified_Bacteria 10.973956  8.908066  8.124339 cecum
+25         g__unclassified_Bacteroidales  8.480865  7.692792  7.265814 cecum
+26     g__unclassified_Coriobacteriaceae  8.909904  7.840481  7.405129 cecum
+27            g__unclassified_Firmicutes  8.729156  7.742478  7.360940 cecum
+28       g__unclassified_Lachnospiraceae  8.490244  7.635450  7.193959 cecum
+29      g__unclassified_Peptococcaceae_1 20.503247 10.756038  9.433642 cecum
+30    g__unclassified_Porphyromonadaceae  8.385727  7.772574  7.358440 cecum
+   level      chrs
+1  Genus autosomes
+2  Genus autosomes
+3  Genus autosomes
+4  Genus autosomes
+5  Genus autosomes
+6  Genus autosomes
+7  Genus autosomes
+8  Genus autosomes
+9  Genus autosomes
+10 Genus autosomes
+11 Genus autosomes
+12 Genus autosomes
+13 Genus autosomes
+14 Genus autosomes
+15 Genus autosomes
+16 Genus autosomes
+17 Genus autosomes
+18 Genus autosomes
+19 Genus autosomes
+20 Genus autosomes
+21 Genus autosomes
+22 Genus autosomes
+23 Genus autosomes
+24 Genus autosomes
+25 Genus autosomes
+26 Genus autosomes
+27 Genus autosomes
+28 Genus autosomes
+29 Genus autosomes
+30 Genus autosomes
+                                               0.01       0.05       0.1  type
+1                       g__Acetatifactor   8.303038   7.572954  7.129112 cecum
+2                         g__Akkermansia  12.531006  11.241724 10.276101 cecum
+3                           g__Alistipes 134.019104 132.264439 73.788331 cecum
+4                        g__Anaerofustis   8.266706   7.494644  7.006480 cecum
+5                             g__Blautia   8.371213   7.415017  6.991126 cecum
+6                      g__Butyricicoccus   8.518088   7.518052  7.077752 cecum
+7                        g__Butyrivibrio   9.097948   8.003045  7.474114 cecum
+8                      g__Clostridium_IV   8.607307   7.592514  7.149723 cecum
+9                    g__Clostridium_XlVa   8.986590   7.852255  7.321616 cecum
+10                   g__Clostridium_XlVb  12.272897  10.246354  9.326626 cecum
+11                        g__Coprococcus   9.342341   7.900186  7.361745 cecum
+12                              g__Dorea  21.055818  16.531917 15.618837 cecum
+13                     g__Eisenbergiella   8.161307   7.178939  6.906211 cecum
+14                      g__Enterorhabdus  13.445960  11.812561 10.544037 cecum
+15 g__Erysipelotrichaceae_incertae_sedis  11.042670   9.398228  8.779461 cecum
+16               g__Escherichia_Shigella  22.179790  18.320768 16.684872 cecum
+17                     g__Intestinimonas   8.412105   7.563664  7.146562 cecum
+18                      g__Lactobacillus  18.950795  17.641593 14.223189 cecum
+19                      g__Lactonifactor  11.834134  10.607626  9.615379 cecum
+20                          g__Murimonas   8.369367   7.392310  6.988630 cecum
+21                          g__Roseburia   9.276769   8.131648  7.628857 cecum
+22                       g__Ruminococcus   9.620215   8.009225  7.520892 cecum
+23                      g__Ruminococcus2  11.068863   9.859290  9.037942 cecum
+24              g__unclassified_Bacteria  16.062655  14.138015 12.945595 cecum
+25         g__unclassified_Bacteroidales   8.478803   7.522045  7.015160 cecum
+26     g__unclassified_Coriobacteriaceae   9.600550   8.393159  7.816158 cecum
+27            g__unclassified_Firmicutes   8.316444   7.540390  7.159051 cecum
+28       g__unclassified_Lachnospiraceae   8.230593   7.500947  7.121397 cecum
+29      g__unclassified_Peptococcaceae_1  25.594132  20.658086 19.631117 cecum
+30    g__unclassified_Porphyromonadaceae   8.268590   7.399420  7.009360 cecum
+   level chrs
+1  Genus    X
+2  Genus    X
+3  Genus    X
+4  Genus    X
+5  Genus    X
+6  Genus    X
+7  Genus    X
+8  Genus    X
+9  Genus    X
+10 Genus    X
+11 Genus    X
+12 Genus    X
+13 Genus    X
+14 Genus    X
+15 Genus    X
+16 Genus    X
+17 Genus    X
+18 Genus    X
+19 Genus    X
+20 Genus    X
+21 Genus    X
+22 Genus    X
+23 Genus    X
+24 Genus    X
+25 Genus    X
+26 Genus    X
+27 Genus    X
+28 Genus    X
+29 Genus    X
+30 Genus    X</code></pre>
+<pre class="r"><code>##extrating phenotypes that are created than 10
+apap &lt;- apa[which(apa$&quot;0.01&quot; &gt;= 9),][1]
+apxp &lt;- apx[which(apx$&quot;0.01&quot; &gt;= 11),][1]
+phenos &lt;- unique(rbind(apap, apxp))
+
+#extracting columns out that match phenos
+csq.dd &lt;- csq[,colnames(csq) %in% as.character(phenos[,1])]
+
+hist.data.frame(csq.dd)</code></pre>
+<p><img src="figure/heatmap_clustering_adj_0.01_black_genus.Rmd/genus%20cecum-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>##selecting out random permutation for those under 10.
+#choosing random 0.01 cutoff for X &amp; autosomes
+a01 &lt;- sample(apa[which(apa$&quot;0.01&quot; &lt; 9),]$`0.01`, 1)
+#a01 &lt;- min(apa$`0.01`)
+print(a01)</code></pre>
+<pre><code>[1] 8.951588</code></pre>
+<pre class="r"><code>x01 &lt;- sample(apx[which(apx$&quot;0.01&quot; &lt; 11),]$`0.01`, 1)
+#x01 &lt;- min(apx$`0.01`)
+print(x01)</code></pre>
+<pre><code>[1] 8.266706</code></pre>
+<div id="figures" class="section level4">
+<h4>Figures</h4>
+<pre class="r"><code>#for(df in 1:length(files)){
+   
+#  pdf(paste0(&quot;/Users/corneb/Documents/MyJax/CS/Projects/Bubier/Figures/corneb/output/qtlmapping.heatmap_cluster_&quot;,files[df],&quot;_&quot;,level,&quot;_run14_max-lod-8.pdf&quot;), width = 14, height = 7)
+
+  x &lt;- get(files[df])
+  x[is.na(x)] &lt;- 0
+  x.matrix &lt;- as.matrix(t(x))
+  x.dendro &lt;- as.dendrogram(hclust(d = dist(x = x.matrix)))
+
+  # Create dendro
+  dendro.plot &lt;- ggdendrogram(data = x.dendro, rotate = TRUE) + 
+                 theme(axis.text.y = element_blank(), 
+                       axis.text.x = element_blank())
+
+  xt &lt;- as.data.frame(t(x))
+  xt$entity &lt;- rownames(xt)
+  herit.df$entity = rownames(herit.df)
+  xth &lt;- merge(herit.df, xt, by=c(&quot;entity&quot;), all.y=T)
+  
+  xh.long &lt;- melt(xth, id=c(&quot;entity&quot;))
+  xh.long$chr &lt;- sapply(strsplit(as.character(xh.long$variable),&#39;_&#39;, fixed = TRUE),function(x) x[1])
+  xh.long[xh.long$chr == xh.long$variable,]$chr &lt;- &quot;herit&quot;
+  xh.long$chr &lt;- factor(xh.long$chr, levels=c(&quot;herit&quot;,1:19,&quot;X&quot;))
+
+  min = min(xh.long$value)
+  max = max(xh.long$value)
+  
+  col.max = ifelse(max &gt; floor(min(a01,x01)), max+1, floor(min(a01,x01))+1)
+  
+  ColorRamp   &lt;- brewer.pal(n=length(min(a01,x01):col.max), &quot;YlOrRd&quot;)</code></pre>
+<pre><code>Warning in brewer.pal(n = length(min(a01, x01):col.max), &quot;YlOrRd&quot;): n too large, allowed maximum for palette YlOrRd is 9
+Returning the palette you asked for with that many colors</code></pre>
+<pre class="r"><code>  #colours &lt;- rbind(data.frame(ColorRamp=rep(&quot;white&quot;, each=(floor(min(a01,x01))-1))), as.data.frame(ColorRamp))
+
+  xh.order &lt;- order.dendrogram(x.dendro)
+  xh.long$entity &lt;- factor(x = xh.long$entity, 
+                           levels = xth$entity[xh.order], 
+                           ordered = TRUE)
+  xh.long$category &lt;- ifelse(xh.long$chr == &quot;herit&quot;, &quot;heritability&quot;, 
+                      ifelse(xh.long$chr == &quot;X&quot;, &quot;X&quot;, &quot;auto&quot;))
+
+  heatmap.plot.2 &lt;-ggplot() +
+                   geom_raster(data = xh.long[xh.long$category == &quot;auto&quot;,], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradientn(limits = c(a01,col.max),colours=ColorRamp, name = &quot;LOD score&quot;,na.value = &#39;black&#39;) +
+                   new_scale_fill() +
+                   geom_raster(data = xh.long[xh.long$category == &quot;X&quot;,], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradientn(limits = c(x01,col.max),colours=ColorRamp, name = &quot;LOD score&quot;,na.value = &#39;black&#39;) +
+                   new_scale_fill() +
+                   geom_raster(data = xh.long[xh.long$category == &quot;heritability&quot;,], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradient(low = &quot;lightblue&quot;, high = &quot;darkblue&quot;, name = &quot;heritability&quot;) +
+                   facet_grid(~ chr,scales = &quot;free&quot;, space = &quot;free_y&quot;) +
+                   ggtitle(paste0(&quot;QTL Mapping &amp; Heritability - &quot;, level,&quot;:&quot;, origin)) +
+                   theme(axis.text.x = element_blank(),
+                         axis.text.y = element_text(size = 5),
+                         axis.ticks.x = element_blank(),
+                         plot.title = element_text(hjust = 0.5),
+                         legend.position = &quot;bottom&quot;)
+
+  grid.newpage()
+  print(heatmap.plot.2, vp = viewport(x = 0.4, y = 0.5, width = 0.8, height = 1.0))
+  print(dendro.plot, vp = viewport(x = 0.90, y = 0.53, width = 0.2, height = 0.79))</code></pre>
+<p><img src="figure/heatmap_clustering_adj_0.01_black_genus.Rmd/genus%20figures%20cecum-1.png" width="912" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>  #dev.off()
+  
+ #}</code></pre>
+</div>
+<div id="peaks" class="section level4">
+<h4>Peaks</h4>
+<pre class="r"><code>  chr = sapply(strsplit(rownames(x),&#39;_&#39;, fixed = TRUE),function(x) x[1])
+  peaks.a &lt;- find_peaks(x[chr != &quot;X&quot;,] ,map, threshold = a01)
+  peaks.x &lt;- find_peaks(x[chr == &quot;X&quot;,] ,map, threshold = x01) 
+  
+  peaks &lt;- rbind(peaks.a, peaks.x)
+  #peaks$origin = origin
+  print(peaks)</code></pre>
+<pre><code>  lodindex               lodcolumn chr       pos       lod
+1       46                g__Dorea   4  2.601016 10.838515
+2       47 g__Escherichia_Shigella  11 47.284624  9.151391
+3       51            g__Alistipes  15 38.046880 11.431272
+4       47 g__Escherichia_Shigella   X 37.382641 20.089401</code></pre>
+<p>####Stool</p>
+<p>#####Permutations</p>
+<pre class="r"><code>files &lt;- grep(&quot;lod.sens.all.s&quot;,names(.GlobalEnv),value=TRUE)
+for(df in 1:length(files)){
+   
+#  pdf(paste0(&quot;/Users/corneb/Documents/MyJax/CS/Projects/Bubier/Figures/corneb/output/qtlmapping.heatmap_cluster_&quot;,files[df],&quot;_&quot;,level,&quot;_run14_max-lod-8.pdf&quot;), width = 14, height = 7)
+
+  st &lt;- sapply(strsplit(files[df],&#39;.&#39;, fixed = TRUE),function(x) x[4])
+  if(st == &#39;c&#39;){
+      herit.df &lt;- as.data.frame(herit.c)
+      origin = &quot;cecum&quot;
+      apa = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_cecum_run14_a.cutoffs.csv&quot;))
+      colnames(apa) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apa))
+      print(apa)
+      apx = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_cecum_run14_x.cutoffs.csv&quot;))
+      colnames(apx) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apx))
+      print(apx)
+  }else{
+      herit.df &lt;- as.data.frame(herit.s)
+      origin = &quot;stool&quot;
+      apa = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_stool_run14_a.cutoffs.csv&quot;))
+      colnames(apa) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apa))
+      print(apa)
+      apx = read.csv(paste0(apDir,&quot;/&quot;, level,&quot;_level_QTL_stool_run14_x.cutoffs.csv&quot;))
+      colnames(apx) &lt;- gsub(&#39;^X&#39;, &quot;&quot;, colnames(apx))
+      print(apx)
+  }
+  
+ }</code></pre>
+<pre><code>                                            0.01      0.05       0.1  type
+1                       g__Akkermansia 11.332270  9.925646  8.775475 stool
+2                      g__Anaerostipes  8.842333  7.948552  7.478145 stool
+3                     g__Anaerotruncus  9.175883  8.102167  7.654459 stool
+4                       g__Anaerovorax  9.162753  8.038574  7.509951 stool
+5                    g__Clostridium_IV  8.753614  7.924184  7.590100 stool
+6                  g__Clostridium_XlVa  8.981682  8.230183  7.661918 stool
+7                 g__Clostridium_XVIII  9.589797  8.406863  7.926056 stool
+8                     g__Coprobacillus  9.253505  8.333877  7.753129 stool
+9                       g__Coprococcus  8.834128  7.932943  7.555973 stool
+10                   g__Eisenbergiella  8.918996  7.969712  7.540520 stool
+11                    g__Enterorhabdus  9.191577  8.109480  7.621057 stool
+12             g__Escherichia_Shigella 31.623521 18.676804 15.636687 stool
+13                 g__Fusicatenibacter 23.357953 13.265428 10.528348 stool
+14                   g__Intestinimonas  8.721796  7.996872  7.641278 stool
+15                    g__Lactobacillus  8.424436  7.699277  7.339483 stool
+16             g__Pseudoflavonifractor  8.746320  7.846502  7.395138 stool
+17                    g__Robinsoniella  8.796636  7.980567  7.556464 stool
+18                    g__Ruminococcus2 13.512544 10.197043  9.160574 stool
+19       g__unclassified_Bacteroidales  8.714252  7.857541  7.510023 stool
+20       g__unclassified_Clostridiales  9.193476  8.079734  7.616554 stool
+21 g__unclassified_Erysipelotrichaceae  9.148316  8.178671  7.735928 stool
+22     g__unclassified_Lachnospiraceae  8.968108  7.944556  7.535445 stool
+   level      chrs
+1  Genus autosomes
+2  Genus autosomes
+3  Genus autosomes
+4  Genus autosomes
+5  Genus autosomes
+6  Genus autosomes
+7  Genus autosomes
+8  Genus autosomes
+9  Genus autosomes
+10 Genus autosomes
+11 Genus autosomes
+12 Genus autosomes
+13 Genus autosomes
+14 Genus autosomes
+15 Genus autosomes
+16 Genus autosomes
+17 Genus autosomes
+18 Genus autosomes
+19 Genus autosomes
+20 Genus autosomes
+21 Genus autosomes
+22 Genus autosomes
+                                            0.01      0.05       0.1  type
+1                       g__Akkermansia 12.548729 10.469635  9.599456 stool
+2                      g__Anaerostipes  8.602616  7.696607  7.264054 stool
+3                     g__Anaerotruncus  9.139293  8.033454  7.601751 stool
+4                       g__Anaerovorax  9.242877  8.067202  7.556570 stool
+5                    g__Clostridium_IV  9.384829  8.175436  7.703805 stool
+6                  g__Clostridium_XlVa  9.187326  8.014229  7.607514 stool
+7                 g__Clostridium_XVIII 10.259730  9.141627  8.444471 stool
+8                     g__Coprobacillus  9.608944  8.330684  7.689670 stool
+9                       g__Coprococcus  9.093054  7.973750  7.559926 stool
+10                   g__Eisenbergiella  8.649078  7.973818  7.507507 stool
+11                    g__Enterorhabdus  9.110165  8.096356  7.655763 stool
+12             g__Escherichia_Shigella 21.762359 17.261392 15.281537 stool
+13                 g__Fusicatenibacter 15.815087 12.329561 11.317877 stool
+14                   g__Intestinimonas  8.950768  7.866832  7.349264 stool
+15                    g__Lactobacillus  8.845539  7.773183  7.375083 stool
+16             g__Pseudoflavonifractor  8.718991  7.776647  7.314050 stool
+17                    g__Robinsoniella  9.289614  8.308198  7.795522 stool
+18                    g__Ruminococcus2 11.985943 10.103188  9.388875 stool
+19       g__unclassified_Bacteroidales  8.432276  7.554895  7.148898 stool
+20       g__unclassified_Clostridiales  9.947357  8.645937  8.016231 stool
+21 g__unclassified_Erysipelotrichaceae  9.219498  8.495618  8.069034 stool
+22     g__unclassified_Lachnospiraceae  8.248950  7.607029  7.115117 stool
+   level chrs
+1  Genus    X
+2  Genus    X
+3  Genus    X
+4  Genus    X
+5  Genus    X
+6  Genus    X
+7  Genus    X
+8  Genus    X
+9  Genus    X
+10 Genus    X
+11 Genus    X
+12 Genus    X
+13 Genus    X
+14 Genus    X
+15 Genus    X
+16 Genus    X
+17 Genus    X
+18 Genus    X
+19 Genus    X
+20 Genus    X
+21 Genus    X
+22 Genus    X</code></pre>
+<pre class="r"><code>##extrating phenotypes that are created than 10
+apap &lt;- apa[which(apa$&quot;0.01&quot; &gt;= 9),][1]
+apxp &lt;- apx[which(apx$&quot;0.01&quot; &gt;= 11),][1]
+phenos &lt;- unique(rbind(apap, apxp))
+
+#extracting columns out that match phenos
+ssq.dd &lt;- ssq[,colnames(ssq) %in% as.character(phenos[,1])]
+
+hist.data.frame(ssq.dd)</code></pre>
+<p><img src="figure/heatmap_clustering_adj_0.01_black_genus.Rmd/genus%20stool-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>##selecting out random permutation for those under 10.
+#choosing random 0.01 cutoff for X &amp; autosomes
+a01 &lt;- sample(apa[which(apa$&quot;0.01&quot; &lt; 9),]$`0.01`, 1)
+#a01 &lt;- min(apa$`0.01`)
+print(a01)</code></pre>
+<pre><code>[1] 8.981682</code></pre>
+<pre class="r"><code>x01 &lt;- sample(apx[which(apx$&quot;0.01&quot; &lt; 11),]$`0.01`, 1)
+#x01 &lt;- min(apx$`0.01`)
+print(x01)</code></pre>
+<pre><code>[1] 8.602616</code></pre>
+</div>
+<div id="figures-1" class="section level4">
+<h4>Figures</h4>
+<pre class="r"><code>#for(df in 1:length(files)){
+   
+#  pdf(paste0(&quot;/Users/corneb/Documents/MyJax/CS/Projects/Bubier/Figures/corneb/output/qtlmapping.heatmap_cluster_&quot;,files[df],&quot;_&quot;,level,&quot;_run14_max-lod-8.pdf&quot;), width = 14, height = 7)
+
+  x &lt;- get(files[df])
+  x[is.na(x)] &lt;- 0
+  x.matrix &lt;- as.matrix(t(x))
+  x.dendro &lt;- as.dendrogram(hclust(d = dist(x = x.matrix)))
+
+  # Create dendro
+  dendro.plot &lt;- ggdendrogram(data = x.dendro, rotate = TRUE) + 
+                 theme(axis.text.y = element_blank(), 
+                       axis.text.x = element_blank())
+
+  xt &lt;- as.data.frame(t(x))
+  xt$entity &lt;- rownames(xt)
+  herit.df$entity = rownames(herit.df)
+  xth &lt;- merge(herit.df, xt, by=c(&quot;entity&quot;), all.y=T)
+  
+  xh.long &lt;- melt(xth, id=c(&quot;entity&quot;))
+  xh.long$chr &lt;- sapply(strsplit(as.character(xh.long$variable),&#39;_&#39;, fixed = TRUE),function(x) x[1])
+  xh.long[xh.long$chr == xh.long$variable,]$chr &lt;- &quot;herit&quot;
+  xh.long$chr &lt;- factor(xh.long$chr, levels=c(&quot;herit&quot;,1:19,&quot;X&quot;))
+
+  min = min(xh.long$value)
+  max = max(xh.long$value)
+  
+  col.max = ifelse(max &gt; floor(min(a01,x01)), max+1, floor(min(a01,x01))+1)
+  
+  ColorRamp   &lt;- brewer.pal(n=length(min(a01,x01):col.max), &quot;YlOrRd&quot;)
+  #colours &lt;- rbind(data.frame(ColorRamp=rep(&quot;white&quot;, each=(floor(min(a01,x01))-1))), as.data.frame(ColorRamp))
+
+  xh.order &lt;- order.dendrogram(x.dendro)
+  xh.long$entity &lt;- factor(x = xh.long$entity, 
+                           levels = xth$entity[xh.order], 
+                           ordered = TRUE)
+  xh.long$category &lt;- ifelse(xh.long$chr == &quot;herit&quot;, &quot;heritability&quot;, 
+                      ifelse(xh.long$chr == &quot;X&quot;, &quot;X&quot;, &quot;auto&quot;))
+
+  heatmap.plot.2 &lt;-ggplot() +
+                   geom_raster(data = xh.long[xh.long$category == &quot;auto&quot;,], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradientn(limits = c(a01,col.max),colours=ColorRamp, name = &quot;LOD score&quot;,na.value = &#39;black&#39;) +
+                   new_scale_fill() +
+                   geom_raster(data = xh.long[xh.long$category == &quot;X&quot;,], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradientn(limits = c(x01,col.max),colours=ColorRamp, name = &quot;LOD score&quot;,na.value = &#39;black&#39;) +
+                   new_scale_fill() +
+                   geom_raster(data = xh.long[xh.long$category == &quot;heritability&quot;,], aes(x = variable, y = entity, fill = value)) +
+                   scale_fill_gradient(low = &quot;lightblue&quot;, high = &quot;darkblue&quot;, name = &quot;heritability&quot;) +
+                   facet_grid(~ chr,scales = &quot;free&quot;, space = &quot;free_y&quot;) +
+                   ggtitle(paste0(&quot;QTL Mapping &amp; Heritability - &quot;, level,&quot;:&quot;, origin)) +
+                   theme(axis.text.x = element_blank(),
+                         axis.text.y = element_text(size = 5),
+                         axis.ticks.x = element_blank(),
+                         plot.title = element_text(hjust = 0.5),
+                         legend.position = &quot;bottom&quot;)
+
+  grid.newpage()
+  print(heatmap.plot.2, vp = viewport(x = 0.4, y = 0.5, width = 0.8, height = 1.0))
+  print(dendro.plot, vp = viewport(x = 0.90, y = 0.53, width = 0.2, height = 0.79))</code></pre>
+<p><img src="figure/heatmap_clustering_adj_0.01_black_genus.Rmd/genus%20figures%20stool-1.png" width="912" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>  #dev.off()
+  
+ #}</code></pre>
+</div>
+<div id="peaks-1" class="section level4">
+<h4>Peaks</h4>
+<pre class="r"><code>  chr = sapply(strsplit(rownames(x),&#39;_&#39;, fixed = TRUE),function(x) x[1])
+  peaks.a &lt;- find_peaks(x[chr != &quot;X&quot;,] ,map, threshold = a01)
+  peaks.x &lt;- find_peaks(x[chr == &quot;X&quot;,] ,map, threshold = x01) 
+  
+  peaks &lt;- rbind(peaks.a, peaks.x)
+  #peaks$origin = origin
+  print(peaks)</code></pre>
+<pre><code>  lodindex lodcolumn chr      pos      lod
+1       46  g__Dorea  12 21.41889 9.956959</code></pre>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.2 (2019-12-12)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS Catalina 10.15.7
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_AU.UTF-8/en_AU.UTF-8/en_AU.UTF-8/C/en_AU.UTF-8/en_AU.UTF-8
+
+attached base packages:
+ [1] stats4    parallel  grid      stats     graphics  grDevices utils    
+ [8] datasets  methods   base     
+
+other attached packages:
+ [1] RCurl_1.98-1.3                     jsonlite_1.7.2                    
+ [3] DOQTL_1.19.0                       VariantAnnotation_1.30.1          
+ [5] Rsamtools_2.0.3                    SummarizedExperiment_1.16.1       
+ [7] DelayedArray_0.12.3                BiocParallel_1.20.1               
+ [9] matrixStats_0.59.0                 Biobase_2.46.0                    
+[11] BSgenome.Mmusculus.UCSC.mm10_1.4.0 BSgenome_1.52.0                   
+[13] rtracklayer_1.44.4                 Biostrings_2.54.0                 
+[15] XVector_0.26.0                     GenomicRanges_1.38.0              
+[17] GenomeInfoDb_1.22.1                IRanges_2.20.2                    
+[19] S4Vectors_0.24.4                   BiocGenerics_0.32.0               
+[21] Hmisc_4.5-0                        Formula_1.2-4                     
+[23] survival_3.1-8                     lattice_0.20-38                   
+[25] qtl2_0.22                          RColorBrewer_1.1-2                
+[27] ggnewscale_0.4.5                   dplyr_0.8.5                       
+[29] reshape2_1.4.4                     ggdendro_0.1.22                   
+[31] ggplot2_3.3.5                      workflowr_1.6.2                   
+
+loaded via a namespace (and not attached):
+  [1] backports_1.2.1          plyr_1.8.6               splines_3.6.2           
+  [4] digest_0.6.27            foreach_1.5.1            htmltools_0.5.1.1       
+  [7] regress_1.3-15           gdata_2.18.0             fansi_0.5.0             
+ [10] magrittr_2.0.1           checkmate_2.0.0          memoise_2.0.0           
+ [13] cluster_2.1.0            doParallel_1.0.15        QTLRel_1.6              
+ [16] annotate_1.64.0          prettyunits_1.1.1        jpeg_0.1-8.1            
+ [19] colorspace_2.0-2         blob_1.2.1               xfun_0.24               
+ [22] crayon_1.4.1             iterators_1.0.13         glue_1.4.2              
+ [25] gtable_0.3.0             zlibbioc_1.32.0          kernlab_0.9-29          
+ [28] Rhdf5lib_1.6.3           prabclus_2.3-2           DEoptimR_1.0-8          
+ [31] scales_1.1.1             DBI_1.1.1                Rcpp_1.0.7              
+ [34] xtable_1.8-4             progress_1.2.2           htmlTable_2.2.1         
+ [37] foreign_0.8-72           bit_4.0.4                mclust_5.4.6            
+ [40] htmlwidgets_1.5.3        httr_1.4.1               fpc_2.2-5               
+ [43] ellipsis_0.3.2           modeltools_0.2-23        farver_2.1.0            
+ [46] pkgconfig_2.0.3          XML_3.99-0.3             flexmix_2.3-15          
+ [49] nnet_7.3-12              utf8_1.2.1               labeling_0.4.2          
+ [52] tidyselect_1.0.0         rlang_0.4.11             later_1.0.0             
+ [55] AnnotationDbi_1.48.0     munsell_0.5.0            tools_3.6.2             
+ [58] cachem_1.0.5             RSQLite_2.2.7            evaluate_0.14           
+ [61] stringr_1.4.0            fastmap_1.1.0            yaml_2.2.1              
+ [64] knitr_1.33               bit64_4.0.5              fs_1.4.1                
+ [67] robustbase_0.93-6        purrr_0.3.4              whisker_0.4             
+ [70] biomaRt_2.40.5           compiler_3.6.2           rstudioapi_0.13         
+ [73] png_0.1-7                tibble_3.1.2             stringi_1.7.2           
+ [76] highr_0.9                annotationTools_1.58.0   GenomicFeatures_1.36.4  
+ [79] Matrix_1.2-18            vctrs_0.3.8              pillar_1.6.1            
+ [82] lifecycle_1.0.0          RUnit_0.4.32             data.table_1.14.0       
+ [85] bitops_1.0-7             corpcor_1.6.9            httpuv_1.5.2            
+ [88] R6_2.5.0                 latticeExtra_0.6-29      hwriter_1.3.2           
+ [91] promises_1.1.0           gridExtra_2.3            codetools_0.2-16        
+ [94] MASS_7.3-51.4            gtools_3.8.2             assertthat_0.2.1        
+ [97] rhdf5_2.28.1             rprojroot_1.3-2          withr_2.4.2             
+[100] GenomicAlignments_1.20.1 GenomeInfoDbData_1.2.2   diptest_0.75-7          
+[103] hms_0.5.3                rpart_4.1-15             class_7.3-15            
+[106] rmarkdown_2.1            git2r_0.26.1             base64enc_0.1-3         </code></pre>
+</div>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
