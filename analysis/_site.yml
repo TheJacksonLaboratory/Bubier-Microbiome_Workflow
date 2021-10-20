@@ -12,7 +12,7 @@ navbar:
   right:
   - icon: fa-github
     text: Source code
-    href: https://github.com/thejacksonlaboratory/Bubier-Microbiome_Workflow
+    href: https://github.com/TheJacksonLaboratory/Bubier-Microbiome_Workflow
 output:
   workflowr::wflow_html:
     toc: yes
